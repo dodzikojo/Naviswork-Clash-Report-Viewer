@@ -13,18 +13,48 @@
         MinWidth="1500"
         Height="900"
         Width="1500">
+    <Window.CommandBindings>
+        <!--<CommandBinding Command="Copy"
+                        CanExecute="commonCommandBinding_CanExecute" />-->
+    </Window.CommandBindings>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.08*" />
-            <ColumnDefinition Width="0.5*" />
+            <ColumnDefinition  Width="0.5*"
+                               MinWidth="250"
+                               MaxWidth="500"/>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="0.4*" />
+            <ColumnDefinition Width="0.06*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="115" />
             <RowDefinition Height="40" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
+        <ToolBarTray 
+                    Grid.Row="0"
+                    Grid.Column="4"
+                    Grid.RowSpan="3"
+                     Orientation="Vertical">
+            <ToolBar>
+                <Button Name="pdfBtn"
+                        ToolTip="Save as PDF"
+                        Click="pdfBtn_Click">
+                    
+                    <Image Source="assets/images/technology.png"
+                           Width="30"/>
+                </Button>
+                <Button 
+                        Name="emailBtn"
+                        ToolTip="Send Email"
+                        Click="emailBtn_Click">
+                    <Image Source="assets/images/multimedia.png"
+                           Width="30"/>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+        
 
         <GroupBox Grid.Row="0"
                   Grid.Column="0"
@@ -90,11 +120,12 @@
                   Grid.Column="2"
                   Padding="10"
                   Foreground="Black"
+                  Background="White"
                   Grid.ColumnSpan="2"
                   BorderThickness="2"
                   FontSize="14"
                   Header="Viewer">
-            <WebBrowser Name="webViewer" />
+            <WebBrowser Name="webViewer"/>
         </GroupBox>
         <Label Content="Filter:"
                Grid.Row="1"
@@ -127,7 +158,7 @@
                           MouseDoubleClick="filesListView_MouseDoubleClick">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="File"
+                            <GridViewColumn Header="Clash Title"
                                             DisplayMemberBinding="{Binding filename}"
                                             Width="300"></GridViewColumn>
                             <GridViewColumn Header="Clashes"

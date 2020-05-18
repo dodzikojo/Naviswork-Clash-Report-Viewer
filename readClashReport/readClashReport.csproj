@@ -8,6 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="assets\images\multimedia.png" />
+    <None Remove="assets\images\technology.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="assets\images\multimedia.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\images\technology.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.23" />
     <PackageReference Include="Ookii.Dialogs" Version="1.0.0" />
   </ItemGroup>

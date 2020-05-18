@@ -20,7 +20,6 @@ namespace readClashReport
         public string active { get; set; }
         public string reviewed { get; set; }
         public string type { get; set; }
-
     }
     
     /// <summary>
@@ -34,131 +33,64 @@ namespace readClashReport
         List<string> filePathList = new List<string>();
         public MainWindow()
         {
-            
             InitializeComponent();
-
             try
             {
                 if (Properties.Appsettings.Default.filePathSetting.Length > 0)
                 {
                     this.folderTxtBox.Text = Properties.Appsettings.Default.filePathSetting;
                     filePaths = Directory.GetFiles(this.folderTxtBox.Text, "*.html");
-
-                    //List<htmlFiles> fileData = new List<htmlFiles>();
                     this.countLabel.Content = filePaths.Length.ToString();
-
                     if (isValid(filePaths))
                     {
                         DisplayData();
                     }
                     
-
                 }
             }
             catch (Exception e)
             {
-
                 Debug.WriteLine(e.Message);
             }
-                
-                
-            
-            
-            
         }
 
-       
-
-        private void webBrowser_Nav(object sender, NavigatingCancelEventArgs e)
-        {
-            //if (!willNavigate)
-            //{
-            //    willNavigate = true;
-            //    return;
-            //}
-
-            e.Cancel = false;
-
-            //Process.Start(e.Uri.ToString());
-
-            try
-            {
-                var startInfo = new ProcessStartInfo
-                {
-                    FileName = e.Uri.ToString()
-                };
-
-                Process.Start(e.Uri.OriginalString); 
-            }
-            catch (Exception ex2)
-            {
-
-                Debug.WriteLine(ex2.Message);
-            }
-            
-            //Debug.WriteLine(e.Uri.ToString());
-            //Debug.WriteLine(e.Uri.OriginalString);
-        }
-
-        private void webBrowser_Navigated(object sender, NavigationEventArgs e)
-        {
-            Debug.WriteLine(e.Uri.ToString());
-        }
-
-        private void webBrowser_LoadCompleted(object sender, NavigationEventArgs e)
-        {
-           
-        }
-
-        private  void browseBtn_Click(object sender, RoutedEventArgs e)
+        private void browseBtn_Click(object sender, RoutedEventArgs e)
         {
             bool valid = false;
-            VistaFolderBrowserDialog abcd = new VistaFolderBrowserDialog();
-            Nullable<bool> sample = abcd.ShowDialog();
+            VistaFolderBrowserDialog folderBrowser = new VistaFolderBrowserDialog();
+            Nullable<bool> fdRun = folderBrowser.ShowDialog();
             try
             {
-                //bool valid;
-                if (sample == true )
+                if (fdRun == true )
                 {
                     string[] tempFilepaths;
-                    this.folderTxtBox.Text = abcd.SelectedPath.ToString();
-                    tempFilepaths = Directory.GetFiles(abcd.SelectedPath.ToString(), "*.html");
+                    this.folderTxtBox.Text = folderBrowser.SelectedPath.ToString();
+                    tempFilepaths = Directory.GetFiles(folderBrowser.SelectedPath.ToString(), "*.html");
                     if (tempFilepaths.Length > 0)
                     {
                         fileData.Clear();
                         valid = isValid(tempFilepaths);
-                        
-                        
-
-
-                        //List<htmlFiles> fileData = new List<htmlFiles>();
                         this.countLabel.Content = filePathList.Count.ToString();
-                        
                     }
-
                     if (valid)
                     {
                         fileData.Clear();
                         DisplayData();
-                        Properties.Appsettings.Default.filePathSetting = abcd.SelectedPath.ToString();
+                        Properties.Appsettings.Default.filePathSetting = folderBrowser.SelectedPath.ToString();
                     }
-                    
-
-
                 }
             }
             catch (Exception ex1)
             {
-
                 Debug.WriteLine(ex1.Message);
             }
-           
-
-            
-           
-
         }
 
+        /// <summary>
+        /// Checks if the file is a valid html and clash report file.
+        /// </summary>
+        /// <param name="tempFilepaths"></param>
+        /// <returns></returns>
         public bool isValid(string[] tempFilepaths)
         {
             bool valid;
@@ -167,7 +99,7 @@ namespace readClashReport
             {
                 foreach (string item in tempFilepaths)
                 {
-                    if (Path.GetFileNameWithoutExtension(item).ToLower().Contains("vs"))
+                    if (Path.GetFileNameWithoutExtension(item).ToLower().Contains("vs") && Path.GetExtension(item).ToString() == ".html")
                     {
                         filePathList.Add(item);
                     }
@@ -177,17 +109,19 @@ namespace readClashReport
             else
             {
                 valid = false;
-                MessageBox.Show("Error","No valid files found.");
+                MessageBox.Show("No valid files found.","Error",MessageBoxButton.OK,MessageBoxImage.Error,MessageBoxResult.OK);
             }
             return valid;
         }
 
+        /// <summary>
+        /// Displays .html files in the listview panel.
+        /// </summary>
         public async void DisplayData()
         {
             filesListView.ItemsSource = null;
             filesListView.Items.Clear();
             fileData.Clear();
-
             await Task.Run(() =>
             {
                 try
@@ -195,8 +129,6 @@ namespace readClashReport
                     foreach (string html in filePathList)
                     {
                         readHTML.readHTMLData(@html);
-                        //fileData.Add(new htmlFiles() { filename = "lajlfaa" });
-
                         this.Dispatcher.Invoke(() =>
                         {
                             filesListView.ItemsSource = fileData;
@@ -213,12 +145,8 @@ namespace readClashReport
                 }
                 catch (Exception ex)
                 {
-
                     Debug.WriteLine(ex.Message);
                 }
-
-                
-
             });
 
             try
@@ -228,11 +156,11 @@ namespace readClashReport
             }
             catch (Exception e)
             {
-
                 Debug.WriteLine(e.Message);
             }
-            
         }
+
+
         private bool UserFilter(object item)
         {
             if (String.IsNullOrEmpty(txtFilter.Text))
@@ -249,33 +177,22 @@ namespace readClashReport
 
         private void filesListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            //System.Collections.IList<string> abcd =  this.filesListView.SelectedItems;
-
             foreach (htmlFiles item in this.filesListView.SelectedItems)
             {
                 Debug.WriteLine(Path.Combine(this.folderTxtBox.Text, item.filename+".html"));
                 this.webViewer.Navigate(Path.Combine(this.folderTxtBox.Text, item.filename + ".html"));
             }
-
-            //if (this.filesListView.SelectedIndex < 0)
-            //{
-
-            //}
-            //else
-            //{
-            //    this.webViewer.Navigate(filePaths[this.filesListView.SelectedIndex]);
-            //    //Path.Combine(this.folderTxtBox.Text, item.filename);
-            //}
-            
-
-            //Debug.WriteLine(filesListView.SelectedIndex.ToString());
         }
 
+        /// <summary>
+        /// Window closing event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Properties.Appsettings.Default.Save();
             e.Cancel = true;
-            //this.Visibility = Visibility.Visible;
             try
             {
                 this.Close();
@@ -285,8 +202,33 @@ namespace readClashReport
                 Environment.Exit(0);
                 Debug.WriteLine(ex.Message);
             }
-            
         }
+
+        /// <summary>
+        /// TODO: Send .html as a PDF via email.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void emailBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("this is the email button.");
+        }
+
+        /// <summary>
+        /// TODO: Save the .html file as PDF.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void pdfBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("this is the save pdf button");
+        }
+
+
+        //private void commonCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        //{
+        //    e.CanExecute = true;
+        //}
 
         //private void wbSample_Navigating(object sender, System.Windows.Navigation.NavigatingCancelEventArgs e)
         //{
