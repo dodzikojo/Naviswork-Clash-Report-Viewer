@@ -9,6 +9,9 @@ using Ookii.Dialogs.Wpf;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using PdfSharpCore;
+using VetCV.HtmlRendererCore.PdfSharpCore;
+using PdfSharpCore.Pdf;
 
 namespace readClashReport
 {
@@ -21,6 +24,7 @@ namespace readClashReport
         public string reviewed { get; set; }
         public string type { get; set; }
         public static string[,] data { get; set; }
+        
     }
     
     /// <summary>
@@ -28,11 +32,13 @@ namespace readClashReport
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static string location { get; set; }
         private static string filename { get; set; }
         public static List<htmlFiles> fileData = new List<htmlFiles>();
         public static List<string> filenamesList = new List<string>();
         public static List<string> clashesList = new List<string>();
         List<string> filePathList = new List<string>();
+        public static bool openExcelBool { get; set; }
 
         /// <summary>
         /// Window Object
@@ -46,7 +52,9 @@ namespace readClashReport
                 InitializeComponent();
 
             });
+            
             try
+
             {
                 if (Properties.Appsettings.Default.filePathSetting.Length > 0)
                 {
@@ -69,6 +77,7 @@ namespace readClashReport
         {
             List<string> filePathListTemp = new List<string>();
             string[] fileArray = Directory.GetFiles(path, "*.html");
+            location = path;
             var results = isValid(fileArray);
 
             if (results.Item2)
@@ -123,6 +132,8 @@ namespace readClashReport
         private void browseBtn_Click(object sender, RoutedEventArgs e)
         {
             VistaFolderBrowserDialog folderBrowser = new VistaFolderBrowserDialog();
+            folderBrowser.Description = "Choose folder where Navisworks clash reports are stored";
+            folderBrowser.UseDescriptionForTitle = true;
             Nullable<bool> fdRun = folderBrowser.ShowDialog();
             try
             {
@@ -288,17 +299,35 @@ namespace readClashReport
         private void emailBtn_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("this is the email button.");
+            //string html = File.ReadAllText(@"C:\Users\dodzi\Desktop\Reports\ARCH (Ceilings, Roof Soffits) vs ARCH (00 Level).html");
+            //PdfDocument pdf = PdfGenerator.GeneratePdf(html, PageSize.A4);
+            //PdfDocument pdf = PdfGenerator.GeneratePdf(html, PageSize.A4);
+
+            //pdf.Save(@"C:\Users\dodzi\Desktop\Reports\document.pdf");
+            excel.writeExcel.PdfSharpConvert(@"C:\Users\dodzi\Desktop\Reports\ARCH (Ceilings, Roof Soffits) vs ARCH (00 Level).html");
         }
+
+
 
         /// <summary>
         /// TODO: Save the .html file as PDF.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void pdfBtn_Click(object sender, RoutedEventArgs e)
+        private void excelBtn_Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("this is the save pdf button");
+            //Debug.WriteLine("this is the save pdf button");
             excel.writeExcel.writeExcelFile(htmlFiles.data);
+        }
+
+        private void openExcelBtn_Checked(object sender, RoutedEventArgs e)
+        {
+            openExcelBool = true;
+        }
+
+        private void openExcelBtn_Unchecked(object sender, RoutedEventArgs e)
+        {
+            openExcelBool = false;
         }
 
 

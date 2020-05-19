@@ -25,7 +25,9 @@
                                MaxWidth="500"/>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="0.4*" />
-            <ColumnDefinition Width="0.06*" />
+            <ColumnDefinition Width="45"
+                              MaxWidth="45"
+                              MinWidth="50"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="115" />
@@ -38,13 +40,28 @@
                     Grid.RowSpan="3"
                      Orientation="Vertical">
             <ToolBar>
-                <Button Name="pdfBtn"
-                        ToolTip="Save as PDF"
-                        Click="pdfBtn_Click">
+                <Button Name="excelBtn"
+                        ToolTip="Export all clash reports to excel"
+                        Click="excelBtn_Click">
                     
-                    <Image Source="assets/images/technology.png"
+                    <Image Source="assets/images/excel.png"
                            Width="30"/>
                 </Button>
+                <StackPanel Orientation="Vertical"
+                            Margin="5,5,5,10">
+                    <CheckBox x:Name="openExcelBtn"
+                             VerticalAlignment="Center"
+                              HorizontalAlignment="Center"
+                              IsChecked="False"
+                              ToolTip="Check to open exported excel document"
+                              Checked="openExcelBtn_Checked"
+                              Unchecked="openExcelBtn_Unchecked" />
+                    
+                </StackPanel>
+                <Border BorderThickness="1"
+                        Margin="5,0,5,5"
+                        Width="30"
+                        BorderBrush="#33001514" />
                 <Button 
                         Name="emailBtn"
                         ToolTip="Send Email"
@@ -52,6 +69,7 @@
                     <Image Source="assets/images/multimedia.png"
                            Width="30"/>
                 </Button>
+                
             </ToolBar>
         </ToolBarTray>
         
