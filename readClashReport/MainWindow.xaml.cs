@@ -29,7 +29,6 @@ namespace readClashReport
     {
         private static string filename { get; set; }
         public static List<htmlFiles> fileData = new List<htmlFiles>();
-        string[] filePaths;
         List<string> filePathList = new List<string>();
         public MainWindow()
         {
@@ -38,14 +37,8 @@ namespace readClashReport
             {
                 if (Properties.Appsettings.Default.filePathSetting.Length > 0)
                 {
-                    this.folderTxtBox.Text = Properties.Appsettings.Default.filePathSetting;
-                    filePaths = Directory.GetFiles(this.folderTxtBox.Text, "*.html");
-                    this.countLabel.Content = filePaths.Length.ToString();
-                    if (isValid(filePaths))
-                    {
-                        DisplayData();
-                    }
-                    
+                    //this.folderTxtBox.Text = Properties.Appsettings.Default.filePathSetting;
+                    getHTMLfiles(this.folderTxtBox.Text = Properties.Appsettings.Default.filePathSetting);
                 }
             }
             catch (Exception e)
@@ -54,30 +47,41 @@ namespace readClashReport
             }
         }
 
+        /// <summary>
+        /// Gets the html files in the user specified folder.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private List<string> getHTMLfiles(string path)
+        {
+            List<string> filePathListTemp = new List<string>();
+            string[] fileArray = Directory.GetFiles(path, "*.html");
+            var results = isValid(fileArray);
+
+            if (results.Item2)
+            {
+                this.folderTxtBox.Text = path;
+                DisplayData(results.Item1);
+            }
+            return filePathListTemp;
+        }
+
+        /// <summary>
+        /// Browse button click event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void browseBtn_Click(object sender, RoutedEventArgs e)
         {
-            bool valid = false;
             VistaFolderBrowserDialog folderBrowser = new VistaFolderBrowserDialog();
             Nullable<bool> fdRun = folderBrowser.ShowDialog();
             try
             {
                 if (fdRun == true )
                 {
-                    string[] tempFilepaths;
-                    this.folderTxtBox.Text = folderBrowser.SelectedPath.ToString();
-                    tempFilepaths = Directory.GetFiles(folderBrowser.SelectedPath.ToString(), "*.html");
-                    if (tempFilepaths.Length > 0)
-                    {
-                        fileData.Clear();
-                        valid = isValid(tempFilepaths);
-                        this.countLabel.Content = filePathList.Count.ToString();
-                    }
-                    if (valid)
-                    {
-                        fileData.Clear();
-                        DisplayData();
-                        Properties.Appsettings.Default.filePathSetting = folderBrowser.SelectedPath.ToString();
-                    }
+                    string chosenPath = folderBrowser.SelectedPath.ToString();
+                    getHTMLfiles(chosenPath);
+                    
                 }
             }
             catch (Exception ex1)
@@ -91,33 +95,55 @@ namespace readClashReport
         /// </summary>
         /// <param name="tempFilepaths"></param>
         /// <returns></returns>
-        public bool isValid(string[] tempFilepaths)
+        public (List<string>, bool) isValid(string[] tempFilepaths)
         {
             bool valid;
+            List<string> filePathListTemp = new List<string>();
             filePathList.Clear();
             if (tempFilepaths.Length > 0)
             {
-                foreach (string item in tempFilepaths)
+                if (tempFilepaths[0].ToString().ToLower().Contains("vs"))
                 {
-                    if (Path.GetFileNameWithoutExtension(item).ToLower().Contains("vs") && Path.GetExtension(item).ToString() == ".html")
+                    fileData.Clear();
+                    valid = true;
+                    this.countLabel.Content = tempFilepaths.Length.ToString();
+                    foreach (string item in tempFilepaths)
                     {
-                        filePathList.Add(item);
+                        if (Path.GetFileNameWithoutExtension(item).ToLower().Contains("vs") && Path.GetExtension(item).ToString() == ".html")
+                        {
+                            filePathListTemp.Add(item);
+                        }
                     }
                 }
-                valid = true;
+                else
+                {
+                    valid = false;
+                    MessageBox.Show("No valid files found in chosen folder." +
+                        " Check that folder contains Navisworks clash test reports." +
+                        " For support, contact the developer.", "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error,
+                        MessageBoxResult.OK);
+                }
             }
             else
             {
                 valid = false;
-                MessageBox.Show("No valid files found.","Error",MessageBoxButton.OK,MessageBoxImage.Error,MessageBoxResult.OK);
+                MessageBox.Show("No valid files found in chosen folder." +
+                    " Check that folder contains Navisworks clash test reports." +
+                    " For support, contact the developer.", "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error,
+                    MessageBoxResult.OK);
             }
-            return valid;
+
+            return (filePathListTemp,valid);
         }
 
         /// <summary>
         /// Displays .html files in the listview panel.
         /// </summary>
-        public async void DisplayData()
+        public async void DisplayData(List<string> filepathlist)
         {
             filesListView.ItemsSource = null;
             filesListView.Items.Clear();
@@ -126,7 +152,7 @@ namespace readClashReport
             {
                 try
                 {
-                    foreach (string html in filePathList)
+                    foreach (string html in filepathlist)
                     {
                         readHTML.readHTMLData(@html);
                         this.Dispatcher.Invoke(() =>
@@ -138,7 +164,7 @@ namespace readClashReport
                     }
                     this.Dispatcher.Invoke(() =>
                     {
-                        this.webViewer.Navigate(filePathList[0]);
+                        this.webViewer.Navigate(filepathlist[0]);
 
                     });
 
