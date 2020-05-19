@@ -39,7 +39,13 @@ namespace readClashReport
         /// </summary>
         public MainWindow()
         {
-            InitializeComponent();
+            //InitializeComponent();
+
+            this.Dispatcher.Invoke(() =>
+            {
+                InitializeComponent();
+
+            });
             try
             {
                 if (Properties.Appsettings.Default.filePathSetting.Length > 0)
