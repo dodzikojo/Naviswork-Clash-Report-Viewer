@@ -20,6 +20,7 @@ namespace readClashReport
         public string active { get; set; }
         public string reviewed { get; set; }
         public string type { get; set; }
+        public static string[,] data { get; set; }
     }
     
     /// <summary>
@@ -29,7 +30,13 @@ namespace readClashReport
     {
         private static string filename { get; set; }
         public static List<htmlFiles> fileData = new List<htmlFiles>();
+        public static List<string> filenamesList = new List<string>();
+        public static List<string> clashesList = new List<string>();
         List<string> filePathList = new List<string>();
+
+        /// <summary>
+        /// Window Object
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -61,9 +68,45 @@ namespace readClashReport
             if (results.Item2)
             {
                 this.folderTxtBox.Text = path;
+                //htmlFiles.data = HTMLdata2DArr(results.Item1);
                 DisplayData(results.Item1);
+                
             }
             return filePathListTemp;
+        }
+
+        private string[,] HTMLdata2DArr(List<string> data)
+        {
+            int num = 0;
+            string[,] tempData = new string[data.Count, 2];
+            Debug.WriteLine(data.Count);
+            try
+            {
+                foreach (string item in data)
+                {
+                    tempData[num, 0] = item;
+                    try
+                    {
+                        tempData[num, 1] = clashesList[num];
+                    }
+                    catch (Exception ex1)
+                    {
+
+                        Debug.WriteLine(ex1.Message);
+                    }
+                    
+                    num++;
+                }
+
+            }
+            catch (Exception e)
+            {
+
+                Debug.WriteLine(e.Message);
+            }
+            
+            
+            return tempData;
         }
 
         /// <summary>
@@ -167,6 +210,7 @@ namespace readClashReport
                         this.webViewer.Navigate(filepathlist[0]);
 
                     });
+                    htmlFiles.data = HTMLdata2DArr(filenamesList);
 
                 }
                 catch (Exception ex)
@@ -248,6 +292,7 @@ namespace readClashReport
         private void pdfBtn_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("this is the save pdf button");
+            excel.writeExcel.writeExcelFile(htmlFiles.data);
         }
 
 

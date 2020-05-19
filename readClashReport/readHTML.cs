@@ -20,9 +20,14 @@ namespace readClashReport
 
         public static htmlFiles fileData { get; set; }
 
+        
+
         //private static Stopwatch watch;
+
+         
         public static void readHTMLData(string html)
         {
+            
             var htmlDoc = new HtmlDocument();
             htmlDoc.Load(html);
             //htmlDoc.LoadHtml(html);
@@ -63,7 +68,7 @@ namespace readClashReport
                             if (nodes.InnerText.ToString() == "Tolerance")
                             {
                                 var nodess = htmlDoc.DocumentNode.SelectSingleNode($"(//body/table[2]/tr[@class='contentRow'])/td[{toleranceCounter}]");
-                                Debug.WriteLine($"Tolerance is: {nodess.InnerText.ToString()}");
+                                //Debug.WriteLine($"Tolerance is: {nodess.InnerText.ToString()}");
                                 
                             }
                         }
@@ -75,7 +80,7 @@ namespace readClashReport
                             if (nodes.InnerText.ToString() == "Clashes")
                             {
                                 var nodess = htmlDoc.DocumentNode.SelectSingleNode($"(//body/table[2]/tr[@class='contentRow'])/td[{clashesCounter}]");
-                                Debug.WriteLine($"Total number of clashes are: {nodess.InnerText.ToString()}");
+                                //Debug.WriteLine($"Total number of clashes are: {nodess.InnerText.ToString()}");
                                 clashesCounttemp = nodess.InnerText.ToString();
                                 //filenameTemp = html;
                                 //MainWindow.fileData.Add(new htmlFiles() { clashes = nodess.InnerText.ToString(), filename = html });
@@ -149,10 +154,21 @@ namespace readClashReport
                         }
 
                     }
-                    MainWindow.fileData.Add(new htmlFiles() { clashes = clashesCounttemp, filename = Path.GetFileNameWithoutExtension(html), newClashes = newTemp });
+                    string file = Path.GetFileNameWithoutExtension(html);
+                    MainWindow.fileData.Add(new htmlFiles() { clashes = clashesCounttemp, filename = file, newClashes = newTemp });
 
+                    try
+                    {
+                        MainWindow.filenamesList.Add(file);
+                        MainWindow.clashesList.Add(clashesCounttemp);
+                    }
+                    catch (Exception e)
+                    {
+
+                        Debug.WriteLine(e.Message);
+                    }
+                    
                 }
-
             }
 
 
