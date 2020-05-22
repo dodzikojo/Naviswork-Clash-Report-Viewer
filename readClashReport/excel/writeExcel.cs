@@ -83,6 +83,7 @@ namespace readClashReport.excel
                         ICell cell_7 = row.CreateCell(6);
                         ICell cell_8 = row.CreateCell(7);
                         ICell cell_9 = row.CreateCell(8);
+                        Debug.WriteLine($"Row is: {rowNo}");
 
                         for (int colNo = 0; colNo < data.GetLength(1); colNo++)
                         {
@@ -124,6 +125,7 @@ namespace readClashReport.excel
 
                 DateTime thisDay = DateTime.Now;
 
+                workbook.Close();
                 string excelfileName = Path.Combine(chosenPath,"Clash Report Export_"+thisDay.ToString("yyyyMMdd")+".xls");
                 WriteToFile(workbook, excelfileName);
 
@@ -138,16 +140,15 @@ namespace readClashReport.excel
                     p.Start();
                 }
 
+
                 
-
             }
-
 
         }
 
         static void WriteToFile(IWorkbook workbook, string savelocation)
         {
-            using (FileStream stream = new FileStream(savelocation, FileMode.Create, FileAccess.ReadWrite))
+            using (FileStream stream = new FileStream(savelocation, FileMode.Create, FileAccess.Write))
             {
                 workbook.Write(stream);
             }

@@ -18,7 +18,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"></RowDefinition>
             <RowDefinition Height="3.9*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="0.85*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width=".3*"></ColumnDefinition>
@@ -34,7 +34,7 @@
                        FontWeight="SemiBold"
                        FontSize="13"
                        TextAlignment="Center"
-                       Text="Clash Test Reports Viewer is developed and maintained by Dodzi Agbenorku, BIM Coordinator."></TextBlock>
+                       Text="Clash Reports Viewer is developed and maintained by Dodzi Agbenorku, BIM Coordinator."></TextBlock>
             <TextBlock Padding="10"
                        TextWrapping="Wrap"
                        FontWeight="SemiBold"
@@ -56,7 +56,7 @@
                  VerticalScrollBarVisibility="Auto"
                  Padding="2"
                  Grid.Column="0"
-                 FontSize="11"
+                 FontSize="13"
                  IsReadOnly="True"
                  Grid.ColumnSpan="3"
                  Margin="5">

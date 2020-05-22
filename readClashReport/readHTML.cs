@@ -55,6 +55,7 @@ namespace readClashReport
             string resolvedTemp = string.Empty;
             string approvedTemp = string.Empty;
 
+            
             foreach (var node in htmlNodes)
             {
                 if (node.HasClass("testSummaryTable"))
@@ -171,7 +172,7 @@ namespace readClashReport
                         MainWindow.newList.Add(newTemp);
                         MainWindow.activeList.Add(activeTemp);
                         MainWindow.reviewedList.Add(reviewedTemp);
-                        MainWindow.approvedList.Add(activeTemp);
+                        MainWindow.approvedList.Add(approvedTemp);
                         MainWindow.resolvedList.Add(resolvedTemp);
                         MainWindow.typeList.Add(typeTemp);
                         

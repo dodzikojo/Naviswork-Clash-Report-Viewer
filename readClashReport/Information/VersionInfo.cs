@@ -11,7 +11,7 @@ namespace readClashReport.Information
         {
             
             "Beta release",
-            "General bug fixes."
+            "General bug fixes"
 
         };
     }

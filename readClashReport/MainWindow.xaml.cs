@@ -102,7 +102,7 @@ namespace readClashReport
         {
             int num = 0;
             string[,] tempData = new string[data.Count, 9];
-            Debug.WriteLine(data.Count);
+            Debug.WriteLine($"data count is {data.Count}");
             try
             {
                 foreach (string filename in data)
@@ -129,6 +129,7 @@ namespace readClashReport
                     
                     num++;
                 }
+                MainWindow.filenamesList.Clear();
 
             }
             catch (Exception e)
@@ -225,6 +226,7 @@ namespace readClashReport
             filesListView.ItemsSource = null;
             filesListView.Items.Clear();
             fileData.Clear();
+            //htmlFiles.data = null;
             await Task.Run(() =>
             {
                 try
@@ -335,6 +337,7 @@ namespace readClashReport
         private void excelBtn_Click(object sender, RoutedEventArgs e)
         {
             //Debug.WriteLine("this is the save pdf button");
+            
             excel.writeExcel.writeExcelFile(htmlFiles.data);
         }
 

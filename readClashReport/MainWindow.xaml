@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Background="WhiteSmoke"
         Closing="Window_Closing"
-        Title="Clash Test Reports Viewer"
+        Title="Clash Reports Viewer"
         MinHeight="900"
         MinWidth="1500"
         Height="900"
