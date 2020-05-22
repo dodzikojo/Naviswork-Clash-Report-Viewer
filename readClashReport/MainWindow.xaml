@@ -19,7 +19,7 @@
     </Window.CommandBindings>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.08*" />
+            <ColumnDefinition Width="0.15*" />
             <ColumnDefinition  Width="0.5*"
                                MinWidth="250"
                                MaxWidth="500"/>
@@ -59,7 +59,7 @@
                     
                 </StackPanel>
                 <Border BorderThickness="1"
-                        Margin="5,0,5,5"
+                        Margin="0,10"
                         Width="30"
                         BorderBrush="#33001514" />
                 <Button 
@@ -69,7 +69,17 @@
                     <Image Source="assets/images/multimedia.png"
                            Width="30"/>
                 </Button>
-                
+                <Border BorderThickness="1"
+                        Margin="0,10"
+                        Width="30"
+                        BorderBrush="#33001514" />
+                <Button Name="aboutBtn"
+                        ToolTip="About"
+                        Click="aboutBtn_Click">
+                    <Image Source="assets/images/about.png"
+                           Width="30" />
+                </Button>
+
             </ToolBar>
         </ToolBarTray>
         
@@ -153,9 +163,10 @@
                VerticalAlignment="Center"
                Grid.Column="0" />
         <TextBox Name="txtFilter"
-                 Margin="5,5,10,5"
+                 Margin="60,5,10,5"
                  Grid.Row="1"
-                 Grid.Column="1"
+                 Grid.Column="0"
+                 Grid.ColumnSpan="2"
                  VerticalAlignment="Center"
                  TextChanged="txtFilter_TextChanged"
                  Height="30"
@@ -179,7 +190,7 @@
                         <GridView>
                             <GridViewColumn Header="Clash Title"
                                             DisplayMemberBinding="{Binding filename}"
-                                            Width="300"></GridViewColumn>
+                                            Width="320"></GridViewColumn>
                             <GridViewColumn Header="Clashes"
                                             DisplayMemberBinding="{Binding clashes}"
                                             Width="100"></GridViewColumn>

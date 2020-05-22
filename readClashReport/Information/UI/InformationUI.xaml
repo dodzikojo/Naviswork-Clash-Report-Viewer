@@ -1,0 +1,93 @@
+﻿<Window x:Class="readClashReport.Information.UI.InformationUI"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:readClashReport.Information.UI"
+        mc:Ignorable="d"
+        Width="400"
+        Height="350"
+        ResizeMode="NoResize"
+        Background="White"
+        MouseDown="Window_MouseDown"
+        WindowStartupLocation="CenterScreen"
+        BorderThickness="2"
+        WindowStyle="None">
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="3.9*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width=".3*"></ColumnDefinition>
+            <ColumnDefinition Width=".4*"></ColumnDefinition>
+            <ColumnDefinition Width=".3*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Grid.Row="0">
+            <TextBlock Padding="10,19,10,0"
+                       TextWrapping="Wrap"
+                       FontWeight="SemiBold"
+                       FontSize="13"
+                       TextAlignment="Center"
+                       Text="Clash Test Reports Viewer is developed and maintained by Dodzi Agbenorku, BIM Coordinator."></TextBlock>
+            <TextBlock Padding="10"
+                       TextWrapping="Wrap"
+                       FontWeight="SemiBold"
+                       TextAlignment="Center">
+                <!--<Hyperlink NavigateUri="https://www.linkedin.com/in/dodziagbenorku/"
+                           RequestNavigate="Hyperlink_RequestNavigate">Connect on LinkedIn</Hyperlink>-->
+                <Button x:Name="connectBtn"
+                        Background="White"
+                        BorderThickness="0"
+                        Click="connectBtn_Click">
+                        <Image Width="20" Source="../../assets/images/linkedin.png"/>
+                    </Button>
+            </TextBlock>
+
+        </StackPanel>
+        <TextBox Grid.Row="1"
+                 Name="aboutReleaseInfo"
+                 TextWrapping="Wrap"
+                 VerticalScrollBarVisibility="Auto"
+                 Padding="2"
+                 Grid.Column="0"
+                 FontSize="11"
+                 IsReadOnly="True"
+                 Grid.ColumnSpan="3"
+                 Margin="5">
+
+        </TextBox>
+        <Button Grid.Row="10"
+                HorizontalContentAlignment="Center"
+                Name="reportBtn"
+                Margin="5"
+                BorderBrush="Black"
+                Background="#0b4f6c"
+                Foreground="White"
+                FontWeight="SemiBold"
+                Click="reportBtn_Click">Report an Issue</Button>
+        <Button Grid.Row="10"
+                Grid.Column="2"
+                Name="CloseBtn"
+                Background="#0b4f6c"
+                Foreground="White"
+                FontWeight="SemiBold"
+                HorizontalContentAlignment="Center"
+                Margin="5"
+                Click="CloseBtn_Click">Close</Button>
+        <Label Grid.Row="10"
+               FontWeight="ExtraLight"
+               FontSize="12"
+               Name="versionLabel"
+               Content=""
+               VerticalAlignment="Bottom"
+               HorizontalAlignment="Center"
+               Grid.Column="1" />
+
+    </Grid>
+</Window>

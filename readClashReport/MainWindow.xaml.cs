@@ -37,6 +37,14 @@ namespace readClashReport
         public static List<htmlFiles> fileData = new List<htmlFiles>();
         public static List<string> filenamesList = new List<string>();
         public static List<string> clashesList = new List<string>();
+        public static List<string> activeList = new List<string>();
+        public static List<string> reviewedList = new List<string>();
+        public static List<string> approvedList = new List<string>();
+        public static List<string> typeList = new List<string>();
+        public static List<string> resolvedList = new List<string>();
+        public static List<string> toleranceList = new List<string>();
+        public static List<string> newList = new List<string>();
+
         List<string> filePathList = new List<string>();
         public static bool openExcelBool { get; set; }
 
@@ -93,16 +101,25 @@ namespace readClashReport
         private string[,] HTMLdata2DArr(List<string> data)
         {
             int num = 0;
-            string[,] tempData = new string[data.Count, 2];
+            string[,] tempData = new string[data.Count, 9];
             Debug.WriteLine(data.Count);
             try
             {
-                foreach (string item in data)
+                foreach (string filename in data)
                 {
-                    tempData[num, 0] = item;
+                    
                     try
                     {
-                        tempData[num, 1] = clashesList[num];
+                        tempData[num, 0] = filename;
+                        tempData[num, 1] = toleranceList[num];
+                        tempData[num, 2] = clashesList[num];
+                        tempData[num, 3] = newList[num];
+                        tempData[num, 4] = activeList[num];
+                        tempData[num, 5] = reviewedList[num];
+                        tempData[num, 6] = approvedList[num];
+                        tempData[num, 7] = resolvedList[num];
+                        tempData[num, 8] = typeList[num];
+
                     }
                     catch (Exception ex1)
                     {
@@ -304,7 +321,8 @@ namespace readClashReport
             //PdfDocument pdf = PdfGenerator.GeneratePdf(html, PageSize.A4);
 
             //pdf.Save(@"C:\Users\dodzi\Desktop\Reports\document.pdf");
-            excel.writeExcel.PdfSharpConvert(@"C:\Users\dodzi\Desktop\Reports\ARCH (Ceilings, Roof Soffits) vs ARCH (00 Level).html");
+            //excel.writeExcel.PdfSharpConvert(@"C:\Users\dodzi\Desktop\Reports\ARCH (Ceilings, Roof Soffits) vs ARCH (00 Level).html");
+            excel.writeExcel.CreateMailItem("Sample Subject");
         }
 
 
@@ -329,6 +347,15 @@ namespace readClashReport
         {
             openExcelBool = false;
         }
+
+        private void aboutBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Information.UI.InformationUI aboutWindow = new Information.UI.InformationUI();
+            aboutWindow.ShowDialog();
+            //Debug.WriteLine("This is the about button.");
+        }
+
+       
 
 
         //private void commonCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)

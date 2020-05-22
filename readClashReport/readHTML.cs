@@ -51,7 +51,9 @@ namespace readClashReport
             string newTemp = string.Empty;
             string typeTemp = string.Empty;
             string toleranceTemp = string.Empty;
+            string reviewedTemp = string.Empty;
             string resolvedTemp = string.Empty;
+            string approvedTemp = string.Empty;
 
             foreach (var node in htmlNodes)
             {
@@ -68,6 +70,7 @@ namespace readClashReport
                             if (nodes.InnerText.ToString() == "Tolerance")
                             {
                                 var nodess = htmlDoc.DocumentNode.SelectSingleNode($"(//body/table[2]/tr[@class='contentRow'])/td[{toleranceCounter}]");
+                                toleranceTemp = nodess.InnerText.ToString();
                                 //Debug.WriteLine($"Tolerance is: {nodess.InnerText.ToString()}");
                                 
                             }
@@ -116,7 +119,7 @@ namespace readClashReport
                             if (nodes.InnerText.ToString() == "Reviewed")
                             {
                                 var nodess = htmlDoc.DocumentNode.SelectSingleNode($"(//body/table[2]/tr[@class='contentRow'])/td[{reviewedCounter}]");
-                                
+                                reviewedTemp = nodess.InnerText.ToString();
                                 //Debug.WriteLine($"Number of reviewed clashes: {nodess.InnerText.ToString()}");
 
                             }
@@ -128,6 +131,7 @@ namespace readClashReport
                             if (nodes.InnerText.ToString() == "Approved")
                             {
                                 var nodess = htmlDoc.DocumentNode.SelectSingleNode($"(//body/table[2]/tr[@class='contentRow'])/td[{approvedCounter}]");
+                                approvedTemp = nodess.InnerText.ToString();
                                 //Debug.WriteLine($"Number of approved clashes: {nodess.InnerText.ToString()}");
                             }
                         }
@@ -138,6 +142,7 @@ namespace readClashReport
                             if (nodes.InnerText.ToString() == "Resolved")
                             {
                                 var nodess = htmlDoc.DocumentNode.SelectSingleNode($"(//body/table[2]/tr[@class='contentRow'])/td[{resolvedCounter}]");
+                                resolvedTemp = nodess.InnerText.ToString();
                                 //Debug.WriteLine($"Number of resolved clashes: {nodess.InnerText.ToString()}");
                             }
                         }
@@ -148,6 +153,7 @@ namespace readClashReport
                             if (nodes.InnerText.ToString() == "Type")
                             {
                                 var nodess = htmlDoc.DocumentNode.SelectSingleNode($"(//body/table[2]/tr[@class='contentRow'])/td[{typeCounter}]");
+                                typeTemp = nodess.InnerText.ToString();
                                 //Debug.WriteLine($"Type of clash performed: {nodess.InnerText.ToString()}");
                                 //Debug.WriteLine("\n");
                             }
@@ -155,12 +161,20 @@ namespace readClashReport
 
                     }
                     string file = Path.GetFileNameWithoutExtension(html);
-                    MainWindow.fileData.Add(new htmlFiles() { clashes = clashesCounttemp, filename = file, newClashes = newTemp });
+                    MainWindow.fileData.Add(new htmlFiles() { clashes = clashesCounttemp, filename = file/*, newClashes = newTemp , active = activeTemp, reviewed = reviewedTemp, type = typeTemp*/});
 
                     try
                     {
+                        MainWindow.toleranceList.Add(toleranceTemp);
                         MainWindow.filenamesList.Add(file);
                         MainWindow.clashesList.Add(clashesCounttemp);
+                        MainWindow.newList.Add(newTemp);
+                        MainWindow.activeList.Add(activeTemp);
+                        MainWindow.reviewedList.Add(reviewedTemp);
+                        MainWindow.approvedList.Add(activeTemp);
+                        MainWindow.resolvedList.Add(resolvedTemp);
+                        MainWindow.typeList.Add(typeTemp);
+                        
                     }
                     catch (Exception e)
                     {
