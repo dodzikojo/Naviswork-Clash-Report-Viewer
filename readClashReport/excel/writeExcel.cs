@@ -6,11 +6,9 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using System.Diagnostics;
 using Ookii.Dialogs.Wpf;
-using VetCV.HtmlRendererCore.PdfSharpCore;
-using PdfSharpCore.Pdf;
-using PdfSharpCore;
-using Microsoft.Office.Interop.Outlook;
 using System.Threading.Tasks;
+using NetOffice.OutlookApi;
+using NetOffice.OutlookApi.Enums;
 
 namespace readClashReport.excel
 {
@@ -164,36 +162,19 @@ namespace readClashReport.excel
             boldStyle.SetFont(font);
         }
 
-        public static Byte[] PdfSharpConvert(String html)
-        {
-            Byte[] res = null;
-            using (MemoryStream ms = new MemoryStream())
-            {
-                var pdf = PdfGenerator.GeneratePdf(html, PageSize.A4);
-                pdf.Save(ms);
-                res = ms.ToArray();
-            }
-            return res;
-        }
+       
 
-        public static async void CreateMailItem(string subject, string emailbody = "")
+        public static async void CreateMailItem(string attachedItem /*,string emailbody = ""*/)
         {
-            Microsoft.Office.Interop.Outlook.Application outApp = new Microsoft.Office.Interop.Outlook.Application();
-            Microsoft.Office.Interop.Outlook.MailItem mailItem = (Microsoft.Office.Interop.Outlook.MailItem)outApp.CreateItem(Microsoft.Office.Interop.Outlook.OlItemType.olMailItem) as Microsoft.Office.Interop.Outlook.MailItem;
-            mailItem.Subject = subject;
-            mailItem.Body = emailbody;
-            //using (StreamReader sr = File.OpenText(@"\\Data1\caddrive\CAD\6348-AWE-The_Hub\04-Production\01-Revit\01-WIP\01-BIM\10-Offline Studies\emaillist.txt"))
-            //{
-            //    string s = String.Empty;
-            //    while ((s = sr.ReadLine()) != null)
-            //    {
-            //        mailItem.To = s;
-            //    }
-            //}
             await Task.Run(() =>
             {
                 try
                 {
+                    Application outApp = new NetOffice.OutlookApi.Application();
+                    MailItem mailItem = (MailItem)outApp.CreateItem(OlItemType.olMailItem);
+                    mailItem.Subject = Path.GetFileNameWithoutExtension(attachedItem);
+//mailItem.Body = emailbody;
+                    mailItem.Attachments.Add(attachedItem, OlAttachmentType.olEmbeddeditem, Type.Missing, Type.Missing);
                     mailItem.Display();
                 }
                 catch (System.Exception ex)

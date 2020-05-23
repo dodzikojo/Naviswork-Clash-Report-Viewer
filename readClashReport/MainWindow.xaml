@@ -5,13 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:readClashReport"
         mc:Ignorable="d"
-        Background="WhiteSmoke"
+        Background="LightGray"
+        
+        WindowStyle="None"
         Closing="Window_Closing"
         Title="Clash Reports Viewer"
+        BorderThickness="1"
+        ResizeMode="CanResizeWithGrip"
+        BorderBrush="Black"
+        MouseDown="Window_MouseDown"
         MinHeight="900"
         MinWidth="1500"
         Height="900"
-        Width="1500">
+        Width="1500"
+        SizeChanged="Window_SizeChanged">
     <Window.CommandBindings>
         <!--<CommandBinding Command="Copy"
                         CanExecute="commonCommandBinding_CanExecute" />-->
@@ -24,9 +31,9 @@
                                MaxWidth="500"/>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="0.4*" />
-            <ColumnDefinition Width="45"
-                              MaxWidth="45"
-                              MinWidth="50"/>
+            <ColumnDefinition Width="40"
+                              MaxWidth="40"
+                              MinWidth="40"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="115" />
@@ -39,6 +46,31 @@
                     Grid.RowSpan="3"
                      Orientation="Vertical">
             <ToolBar>
+                <Button Name="closeBtn"
+                        ToolTip="Close"
+                        Margin="0,0,0,0"
+                        Click="closeBtn_Click">
+                    <Image Source="assets/images/close.png"
+                           Width="15" />
+                </Button>
+                <Button Name="maximizeBtn"
+                        ToolTip="Maximize"
+                        Margin="0,2,0,0"
+                        Click="maximizeBtn_Click">
+                    <Image Name="maximizeImg" Source="assets/images/expand.png"
+                           Width="15" />
+                </Button>
+                <Button Name="minimizeBtn"
+                        ToolTip="Minimize Window"
+                        Margin="0,2,0,10"
+                        Click="minimizeBtn_Click">
+                    <Image Source="assets/images/minimize.png"
+                           Width="15" />
+                </Button>
+                <Border BorderThickness="1"
+                        Margin="0,3,0,10"
+                        Width="30"
+                        BorderBrush="#33001514" />
                 <Button Name="excelBtn"
                         ToolTip="Export all clash reports to excel"
                         Click="excelBtn_Click">
@@ -46,6 +78,7 @@
                     <Image Source="assets/images/excel.png"
                            Width="30"/>
                 </Button>
+                
                 <StackPanel Orientation="Vertical"
                             Margin="5,5,5,10">
                     <CheckBox x:Name="openExcelBtn"
@@ -57,10 +90,14 @@
                               Unchecked="openExcelBtn_Unchecked" />
                     
                 </StackPanel>
-                <Border BorderThickness="1"
-                        Margin="0,10"
-                        Width="30"
-                        BorderBrush="#33001514" />
+
+                <Button Name="pdfBtn"
+                        Margin="0,0,0,10"
+                        ToolTip="Create PDF from current clash report. Saved in folder"
+                        Click="pdfBtn_Click">
+                    <Image Source="assets/images/pdf.png"
+                           Width="30" />
+                </Button>
                 <Button 
                         Name="emailBtn"
                         ToolTip="Send Email"
@@ -87,7 +124,7 @@
         <GroupBox Grid.Row="0"
                   Grid.Column="0"
                   Grid.ColumnSpan="2"
-                  Margin="8,5,5,5"
+                  Margin="15,5,5,5"
                   FontSize="14"
                   BorderThickness="1"
                   BorderBrush="DarkGray"
@@ -116,7 +153,8 @@
                              Margin="5"
                              
                              x:Name="folderTxtBox"
-                             IsReadOnly="True" />
+                             IsReadOnly="True"
+                         TextChanged="folderTxtBox_TextChanged" />
                     <Button Margin="0,5,5,5"
                                 Content="Browse"
                                 Height="30"
@@ -124,14 +162,14 @@
                             Grid.Column="2"
                                 Name="browseBtn"
                                 Click="browseBtn_Click" />
-                        <Label Content="Number of clash test reports: "
+                        <Label Content="Clash Test Reports: "
                                HorizontalAlignment="Right"
                                Grid.Row="1"
                                Grid.Column="1"
                                Grid.ColumnSpan="1"
                                VerticalAlignment="Center"
                                Margin="2,5,5,5" />
-                        <Label Content="180"
+                        <Label Content="0"
                                Grid.Row="1"
                                Grid.Column="2"
                                VerticalAlignment="Center"
@@ -144,25 +182,26 @@
         
         <GroupBox Grid.Row="0"
                   Grid.RowSpan="3"
-                  Margin="5"
+                  Margin="5,15,15,15"
                   Grid.Column="2"
-                  Padding="10"
                   Foreground="Black"
                   Background="White"
                   Grid.ColumnSpan="2"
-                  BorderThickness="2"
-                  FontSize="14"
-                  Header="Viewer">
-            <WebBrowser Name="webViewer"/>
+                  BorderThickness="1"
+                  FontSize="14">
+            <WebBrowser 
+                Opacity="10000"
+                Name="webViewer"/>
         </GroupBox>
         <Label Content="Filter:"
                Grid.Row="1"
                FontSize="14"
-               Margin="5,5,10,5"
+               Margin="10,5,10,5"
+               
                VerticalAlignment="Center"
                Grid.Column="0" />
         <TextBox Name="txtFilter"
-                 Margin="60,5,10,5"
+                 Margin="60,5,5,5"
                  Grid.Row="1"
                  Grid.Column="0"
                  Grid.ColumnSpan="2"
@@ -172,7 +211,7 @@
                  Padding="5" />
 
         <ListView HorizontalAlignment="Stretch"
-                          Margin="5"
+                          Margin="15,5,5,15"
                           Padding="0"
                           Grid.Column="0"
                           Grid.ColumnSpan="2"
@@ -214,7 +253,7 @@
                       VerticalAlignment="Stretch"
                       Margin="0,0,0,0"
                       Grid.RowSpan="3"
-                      Background="WhiteSmoke"
+                      Background="LightGray"
                       Width="5" />
         <!--<WebBrowser Grid.Row="0"
                     Grid.RowSpan="2"

@@ -1,4 +1,6 @@
-﻿using Microsoft.Office.Interop.Outlook;
+﻿
+using NetOffice.OutlookApi;
+using NetOffice.OutlookApi.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -51,8 +53,8 @@ namespace readClashReport.Information.UI
         private async void reportBtn_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
-            Microsoft.Office.Interop.Outlook.Application outApp = new Microsoft.Office.Interop.Outlook.Application();
-            Microsoft.Office.Interop.Outlook.MailItem mailItem = (Microsoft.Office.Interop.Outlook.MailItem)outApp.CreateItem(Microsoft.Office.Interop.Outlook.OlItemType.olMailItem) as Microsoft.Office.Interop.Outlook.MailItem;
+            NetOffice.OutlookApi.Application outApp = new NetOffice.OutlookApi.Application();
+            MailItem mailItem = (MailItem)outApp.CreateItem(OlItemType.olMailItem);
             mailItem.Subject = "Pascall+Watson Revit Tools Issue";
             mailItem.Body = "**Describe Issue Here**";
             mailItem.To = "dodzi.agbenorku@pascalls.co.uk";

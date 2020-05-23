@@ -9,11 +9,9 @@ using Ookii.Dialogs.Wpf;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using PdfSharpCore;
-using VetCV.HtmlRendererCore.PdfSharpCore;
-using PdfSharpCore.Pdf;
 using readClashReport.Properties;
-using System.Drawing;
+using PuppeteerSharp;
+using System.Runtime.CompilerServices;
 
 namespace readClashReport
 {
@@ -26,9 +24,9 @@ namespace readClashReport
         public string reviewed { get; set; }
         public string type { get; set; }
         public static string[,] data { get; set; }
-        
+
     }
-    
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -36,6 +34,7 @@ namespace readClashReport
     {
         public static string location { get; set; }
         private static string filename { get; set; }
+        public static string currentItem { get; set; }
         public static List<htmlFiles> fileData = new List<htmlFiles>();
         public static List<string> filenamesList = new List<string>();
         public static List<string> clashesList = new List<string>();
@@ -46,7 +45,6 @@ namespace readClashReport
         public static List<string> resolvedList = new List<string>();
         public static List<string> toleranceList = new List<string>();
         public static List<string> newList = new List<string>();
-
         List<string> filePathList = new List<string>();
         public static bool openExcelBool { get; set; }
 
@@ -66,9 +64,9 @@ namespace readClashReport
                 Debug.WriteLine(Settings.Default.WindowLocation);
                 //Set window location
                 if (Settings.Default.WindowLocation != null)
-                { 
-                    this.Top = Settings.Default.WindowLocation.Y;
-                    this.Left = Settings.Default.WindowLocation.X;
+                {
+                    //this.Top = Settings.Default.WindowLocation.Y;
+                    //this.Left = Settings.Default.WindowLocation.X;
                 }
 
                 //Set window size
@@ -79,7 +77,7 @@ namespace readClashReport
                 }
 
             });
-            
+
             try
 
             {
@@ -93,6 +91,8 @@ namespace readClashReport
             {
                 Debug.WriteLine(e.Message);
             }
+
+
         }
 
         /// <summary>
@@ -112,11 +112,16 @@ namespace readClashReport
                 this.folderTxtBox.Text = path;
                 //htmlFiles.data = HTMLdata2DArr(results.Item1);
                 DisplayData(results.Item1);
-                
+
             }
             return filePathListTemp;
         }
 
+        /// <summary>
+        /// Takes HTML data and creates a 2D Array
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         private string[,] HTMLdata2DArr(List<string> data)
         {
             int num = 0;
@@ -126,7 +131,7 @@ namespace readClashReport
             {
                 foreach (string filename in data)
                 {
-                    
+
                     try
                     {
                         tempData[num, 0] = filename;
@@ -145,7 +150,7 @@ namespace readClashReport
 
                         Debug.WriteLine(ex1.Message);
                     }
-                    
+
                     num++;
                 }
                 MainWindow.filenamesList.Clear();
@@ -156,8 +161,8 @@ namespace readClashReport
 
                 Debug.WriteLine(e.Message);
             }
-            
-            
+
+
             return tempData;
         }
 
@@ -174,11 +179,11 @@ namespace readClashReport
             Nullable<bool> fdRun = folderBrowser.ShowDialog();
             try
             {
-                if (fdRun == true )
+                if (fdRun == true)
                 {
                     string chosenPath = folderBrowser.SelectedPath.ToString();
                     getHTMLfiles(chosenPath);
-                    
+
                 }
             }
             catch (Exception ex1)
@@ -234,7 +239,7 @@ namespace readClashReport
                     MessageBoxResult.OK);
             }
 
-            return (filePathListTemp,valid);
+            return (filePathListTemp, valid);
         }
 
         /// <summary>
@@ -263,6 +268,8 @@ namespace readClashReport
                     this.Dispatcher.Invoke(() =>
                     {
                         this.webViewer.Navigate(filepathlist[0]);
+                        currentItem = filepathlist[0];
+                        //getAllLinks(currentItem);
 
                     });
                     htmlFiles.data = HTMLdata2DArr(filenamesList);
@@ -285,6 +292,23 @@ namespace readClashReport
             }
         }
 
+        static async void getAllLinks(string file)
+        {
+            LaunchOptions options = new LaunchOptions();
+            using (var browser = await Puppeteer.LaunchAsync(options))
+            using (var page = await browser.NewPageAsync())
+            {
+                await page.GoToAsync(file);
+                var jsSelectAllAnchors = @"Array.from(document.querySelectorAll('a')).map(a => a.href);";
+                var urls = await page.EvaluateExpressionAsync<string[]>(jsSelectAllAnchors);
+                foreach (string url in urls)
+                {
+                    Debug.WriteLine($"Url: {url}");
+                }
+                //Console.WriteLine("Press any key to continue...");
+                //Console.ReadLine();
+            }
+        }
 
         private bool UserFilter(object item)
         {
@@ -304,8 +328,9 @@ namespace readClashReport
         {
             foreach (htmlFiles item in this.filesListView.SelectedItems)
             {
-                Debug.WriteLine(Path.Combine(this.folderTxtBox.Text, item.filename+".html"));
-                this.webViewer.Navigate(Path.Combine(this.folderTxtBox.Text, item.filename + ".html"));
+                //Debug.WriteLine(Path.Combine(this.folderTxtBox.Text, item.filename + ".html"));
+                currentItem = Path.Combine(this.folderTxtBox.Text, item.filename + ".html");
+                this.webViewer.Navigate(currentItem);
             }
         }
 
@@ -316,8 +341,12 @@ namespace readClashReport
         /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+
+
             // Copy window location to app settings
             Settings.Default.WindowLocation = new System.Drawing.Point(Convert.ToInt32(this.Left), Convert.ToInt32(this.Top));
+
+            Debug.WriteLine(this.folderTxtBox.Text);
 
             //Copy window size to app settings
             if (this.WindowState == WindowState.Normal)
@@ -341,6 +370,7 @@ namespace readClashReport
             }
         }
 
+
         /// <summary>
         /// TODO: Send .html as a PDF via email.
         /// </summary>
@@ -349,16 +379,36 @@ namespace readClashReport
         private void emailBtn_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("this is the email button.");
+            //createPDF(MainWindow.currentItem);
             //string html = File.ReadAllText(@"C:\Users\dodzi\Desktop\Reports\ARCH (Ceilings, Roof Soffits) vs ARCH (00 Level).html");
             //PdfDocument pdf = PdfGenerator.GeneratePdf(html, PageSize.A4);
             //PdfDocument pdf = PdfGenerator.GeneratePdf(html, PageSize.A4);
 
             //pdf.Save(@"C:\Users\dodzi\Desktop\Reports\document.pdf");
             //excel.writeExcel.PdfSharpConvert(@"C:\Users\dodzi\Desktop\Reports\ARCH (Ceilings, Roof Soffits) vs ARCH (00 Level).html");
-            excel.writeExcel.CreateMailItem("Sample Subject");
+            //excel.writeExcel.CreateMailItem(MainWindow.currentItem);
         }
 
+        static async void createPDF(string file)
+        {
+            await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
+            var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+            {
+                Headless = true
+            });
+            var page = await browser.NewPageAsync();
+            await page.SetViewportAsync(new ViewPortOptions { Width = 50000, Height = 50 });
+            await page.GoToAsync(file);
 
+            PdfOptions options = new PdfOptions();
+            options.Width = 2000;
+            options.Height = 1200;
+            options.MarginOptions.Left = "100";
+            options.MarginOptions.Right = "100";
+            
+            await page.PdfAsync(Path.Combine(location,Path.GetFileNameWithoutExtension(file)+".pdf"),options);
+
+        }
 
         /// <summary>
         /// TODO: Save the .html file as PDF.
@@ -368,7 +418,7 @@ namespace readClashReport
         private void excelBtn_Click(object sender, RoutedEventArgs e)
         {
             //Debug.WriteLine("this is the save pdf button");
-            
+
             excel.writeExcel.writeExcelFile(htmlFiles.data);
         }
 
@@ -389,17 +439,83 @@ namespace readClashReport
             //Debug.WriteLine("This is the about button.");
         }
 
-       
+        private void closeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                Environment.Exit(0);
+                Debug.WriteLine(ex.Message);
+            }
+        }
 
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Mouse.LeftButton == MouseButtonState.Pressed)
+            {
+                this.DragMove();
+            }
+        }
 
-        //private void commonCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        //{
-        //    e.CanExecute = true;
-        //}
+        private void maximizeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            //this.Close();
+            if (this.WindowState == WindowState.Normal)
+            {
+                this.WindowState = WindowState.Maximized;
+            }
+            else if (this.WindowState == WindowState.Minimized)
+            {
+                this.WindowState = WindowState.Maximized;
+            }
+            else if (this.WindowState == WindowState.Maximized)
+            {
+                this.WindowState = WindowState.Normal;
+            }
+            //this.WindowState = WindowState.Maximized;
 
-        //private void wbSample_Navigating(object sender, System.Windows.Navigation.NavigatingCancelEventArgs e)
-        //{
-        //    Debug.WriteLine(e.Uri.OriginalString);
-        //}
+        }
+
+        private void minimizeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Normal)
+            {
+                this.WindowState = WindowState.Minimized;
+            }
+            else if (this.WindowState == WindowState.Minimized)
+            {
+                this.WindowState = WindowState.Normal;
+            }
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (WindowState == WindowState.Normal)
+            {
+                this.maximizeBtn.ToolTip = "Maximize Window";
+            }
+            else if (WindowState == WindowState.Maximized)
+            {
+                this.maximizeBtn.ToolTip = "Restore Window";
+            }
+        }
+
+        private void folderTxtBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            Settings.Default.filePathSetting = this.folderTxtBox.Text;
+            Settings.Default.Save();
+        }
+
+        private void pdfBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("this is the pdf button.");
+            createPDF(MainWindow.currentItem);
+        }
     }
 }
+
+
