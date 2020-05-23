@@ -148,6 +148,7 @@ namespace readClashReport.excel
 
         static void WriteToFile(IWorkbook workbook, string savelocation)
         {
+            //TODO: Warn users of potential block by antivirus and should be allowed.
             using (FileStream stream = new FileStream(savelocation, FileMode.Create, FileAccess.Write))
             {
                 workbook.Write(stream);

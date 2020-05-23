@@ -12,6 +12,8 @@ using System.Windows.Data;
 using PdfSharpCore;
 using VetCV.HtmlRendererCore.PdfSharpCore;
 using PdfSharpCore.Pdf;
+using readClashReport.Properties;
+using System.Drawing;
 
 namespace readClashReport
 {
@@ -48,6 +50,8 @@ namespace readClashReport
         List<string> filePathList = new List<string>();
         public static bool openExcelBool { get; set; }
 
+
+
         /// <summary>
         /// Window Object
         /// </summary>
@@ -59,15 +63,30 @@ namespace readClashReport
             {
                 InitializeComponent();
 
+                Debug.WriteLine(Settings.Default.WindowLocation);
+                //Set window location
+                if (Settings.Default.WindowLocation != null)
+                { 
+                    this.Top = Settings.Default.WindowLocation.Y;
+                    this.Left = Settings.Default.WindowLocation.X;
+                }
+
+                //Set window size
+                if (Settings.Default.WindowSize != null)
+                {
+                    this.Width = Settings.Default.WindowSize.Width;
+                    this.Height = Settings.Default.WindowSize.Height;
+                }
+
             });
             
             try
 
             {
-                if (Properties.Appsettings.Default.filePathSetting.Length > 0)
+                if (Properties.Settings.Default.filePathSetting.Length > 0)
                 {
                     //this.folderTxtBox.Text = Properties.Appsettings.Default.filePathSetting;
-                    getHTMLfiles(this.folderTxtBox.Text = Properties.Appsettings.Default.filePathSetting);
+                    getHTMLfiles(this.folderTxtBox.Text = Properties.Settings.Default.filePathSetting);
                 }
             }
             catch (Exception e)
@@ -297,7 +316,19 @@ namespace readClashReport
         /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Properties.Appsettings.Default.Save();
+            // Copy window location to app settings
+            Settings.Default.WindowLocation = new System.Drawing.Point(Convert.ToInt32(this.Left), Convert.ToInt32(this.Top));
+
+            //Copy window size to app settings
+            if (this.WindowState == WindowState.Normal)
+            {
+                Settings.Default.WindowSize = new System.Drawing.Size(Convert.ToInt32(this.Width), Convert.ToInt32(this.Height));
+            }
+            else
+            {
+                Settings.Default.WindowSize = new System.Drawing.Size(Convert.ToInt32(this.RestoreBounds.Size.Width), Convert.ToInt32(this.RestoreBounds.Size.Height));
+            }
+            Properties.Settings.Default.Save();
             e.Cancel = true;
             try
             {
