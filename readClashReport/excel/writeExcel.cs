@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using NPOI.HSSF.UserModel;
+﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-using System.Diagnostics;
 using Ookii.Dialogs.Wpf;
-using System.Threading.Tasks;
-using NetOffice.OutlookApi;
-using NetOffice.OutlookApi.Enums;
+using System;
+using System.Diagnostics;
+using System.IO;
 
 namespace readClashReport.excel
 {
@@ -102,7 +97,7 @@ namespace readClashReport.excel
 
                                 Debug.WriteLine(e.Message);
                             }
-                            
+
 
                         }
                     }
@@ -124,7 +119,7 @@ namespace readClashReport.excel
                 DateTime thisDay = DateTime.Now;
 
                 workbook.Close();
-                string excelfileName = Path.Combine(chosenPath,"Clash Report Export_"+thisDay.ToString("yyyyMMdd")+".xls");
+                string excelfileName = Path.Combine(chosenPath, "Clash Report Export_" + thisDay.ToString("yyyyMMdd") + ".xls");
                 WriteToFile(workbook, excelfileName);
 
 
@@ -139,7 +134,7 @@ namespace readClashReport.excel
                 }
 
 
-                
+
             }
 
         }
@@ -162,29 +157,8 @@ namespace readClashReport.excel
             boldStyle.SetFont(font);
         }
 
-       
-
-        public static async void CreateMailItem(string attachedItem /*,string emailbody = ""*/)
-        {
-            await Task.Run(() =>
-            {
-                try
-                {
-                    Application outApp = new NetOffice.OutlookApi.Application();
-                    MailItem mailItem = (MailItem)outApp.CreateItem(OlItemType.olMailItem);
-                    mailItem.Subject = Path.GetFileNameWithoutExtension(attachedItem);
-//mailItem.Body = emailbody;
-                    mailItem.Attachments.Add(attachedItem, OlAttachmentType.olEmbeddeditem, Type.Missing, Type.Missing);
-                    mailItem.Display();
-                }
-                catch (System.Exception ex)
-                {
-
-                    Debug.WriteLine(ex.Message);
-                }
-            });
 
 
-        }
+
     }
 }

@@ -2,20 +2,11 @@
 using NetOffice.OutlookApi;
 using NetOffice.OutlookApi.Enums;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace readClashReport.Information.UI
 {
@@ -45,19 +36,15 @@ namespace readClashReport.Information.UI
             this.Close();
         }
 
-        //private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
-        //{
-        //    System.Diagnostics.Process.Start(e.Uri.ToString());
-        //}
-
+ 
         private async void reportBtn_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
             NetOffice.OutlookApi.Application outApp = new NetOffice.OutlookApi.Application();
             MailItem mailItem = (MailItem)outApp.CreateItem(OlItemType.olMailItem);
-            mailItem.Subject = "Pascall+Watson Revit Tools Issue";
+            mailItem.Subject = "Clash Report Viewer Issue";
             mailItem.Body = "**Describe Issue Here**";
-            mailItem.To = "dodzi.agbenorku@pascalls.co.uk";
+            mailItem.To = "dodzi@windowslive.com";
             mailItem.Importance = OlImportance.olImportanceNormal;
 
             await Task.Run(() =>
@@ -81,13 +68,13 @@ namespace readClashReport.Information.UI
 
         private void connectBtn_Click(object sender, RoutedEventArgs e)
         {
-           // System.Diagnostics.Process.Start("https://www.linkedin.com/in/dodziagbenorku/");
+            // System.Diagnostics.Process.Start("https://www.linkedin.com/in/dodziagbenorku/");
             OpenBrowser("https://www.linkedin.com/in/dodziagbenorku/");
         }
 
         public static void OpenBrowser(string url)
         {
-            
+
             try
             {
                 Process.Start(url);

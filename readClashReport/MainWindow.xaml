@@ -7,9 +7,9 @@
         mc:Ignorable="d"
         Background="LightGray"
         
-        WindowStyle="None"
+        WindowStyle="SingleBorderWindow"
         Closing="Window_Closing"
-        Title="Clash Reports Viewer"
+        Title="Clash Report Viewer"
         BorderThickness="1"
         ResizeMode="CanResizeWithGrip"
         BorderBrush="Black"
@@ -18,7 +18,8 @@
         MinWidth="1500"
         Height="900"
         Width="1500"
-        SizeChanged="Window_SizeChanged">
+        SizeChanged="Window_SizeChanged"
+        Loaded="Window_Loaded">
     <Window.CommandBindings>
         <!--<CommandBinding Command="Copy"
                         CanExecute="commonCommandBinding_CanExecute" />-->
@@ -72,7 +73,7 @@
                         Width="30"
                         BorderBrush="#33001514" />
                 <Button Name="excelBtn"
-                        ToolTip="Export all clash reports to excel"
+                        ToolTip="Export all clash reports summary to single excel document"
                         Click="excelBtn_Click">
                     
                     <Image Source="assets/images/excel.png"
@@ -98,15 +99,15 @@
                     <Image Source="assets/images/pdf.png"
                            Width="30" />
                 </Button>
-                <Button 
+                <!--<Button 
                         Name="emailBtn"
                         ToolTip="Send Email"
                         Click="emailBtn_Click">
                     <Image Source="assets/images/multimedia.png"
                            Width="30"/>
-                </Button>
+                </Button>-->
                 <Border BorderThickness="1"
-                        Margin="0,10"
+                        Margin="0,0,5,5"
                         Width="30"
                         BorderBrush="#33001514" />
                 <Button Name="aboutBtn"
@@ -127,11 +128,12 @@
                   Margin="15,5,5,5"
                   FontSize="14"
                   BorderThickness="1"
-                  BorderBrush="DarkGray"
+                  BorderBrush="Black"
                   Header="Source">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.25*" />
+                    <ColumnDefinition Width="75"
+                                      MinWidth="75"/>
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="0.3*" />
                 </Grid.ColumnDefinitions>
@@ -150,7 +152,7 @@
                              Height="30"
                              VerticalContentAlignment="Center"
                              Padding="4"
-                             Margin="5"
+                             Margin="-8,5,5,5"
                              
                              x:Name="folderTxtBox"
                              IsReadOnly="True"
@@ -182,12 +184,14 @@
         
         <GroupBox Grid.Row="0"
                   Grid.RowSpan="3"
-                  Margin="5,15,15,15"
+                  Margin="5,05,15,15"
                   Grid.Column="2"
                   Foreground="Black"
                   Background="White"
                   Grid.ColumnSpan="2"
                   BorderThickness="1"
+                  Header="Viewer"
+                  BorderBrush="Black"
                   FontSize="14">
             <WebBrowser 
                 Opacity="10000"

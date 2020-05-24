@@ -55,7 +55,7 @@
 
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.23" />
-    <PackageReference Include="NetOfficeFw.Outlook" Version="1.7.4.8" />
+    <PackageReference Include="NetOffice.Outlook" Version="1.7.4.4" />
     <PackageReference Include="NPOI" Version="2.5.1" />
     <PackageReference Include="Ookii.Dialogs.Wpf.NETCore" Version="2.1.0" />
     <PackageReference Include="PuppeteerSharp" Version="2.0.3" />

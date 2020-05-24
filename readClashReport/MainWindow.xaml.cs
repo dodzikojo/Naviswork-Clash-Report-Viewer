@@ -1,17 +1,16 @@
-﻿using Microsoft.Win32;
+﻿using Ookii.Dialogs.Wpf;
+using PuppeteerSharp;
+using readClashReport.Properties;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Navigation;
-using Ookii.Dialogs.Wpf;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
-using readClashReport.Properties;
-using PuppeteerSharp;
-using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using System.Windows.Interop;
 
 namespace readClashReport
 {
@@ -32,6 +31,9 @@ namespace readClashReport
     /// </summary>
     public partial class MainWindow : Window
     {
+        private const int GWL_STYLE = -16;
+        private const int WS_SYSMENU = 0x80000;
+
         public static string location { get; set; }
         private static string filename { get; set; }
         public static string currentItem { get; set; }
@@ -65,8 +67,8 @@ namespace readClashReport
                 //Set window location
                 if (Settings.Default.WindowLocation != null)
                 {
-                    //this.Top = Settings.Default.WindowLocation.Y;
-                    //this.Left = Settings.Default.WindowLocation.X;
+                    this.Top = Settings.Default.WindowLocation.Y;
+                    this.Left = Settings.Default.WindowLocation.X;
                 }
 
                 //Set window size
@@ -91,7 +93,6 @@ namespace readClashReport
             {
                 Debug.WriteLine(e.Message);
             }
-
 
         }
 
@@ -269,7 +270,6 @@ namespace readClashReport
                     {
                         this.webViewer.Navigate(filepathlist[0]);
                         currentItem = filepathlist[0];
-                        //getAllLinks(currentItem);
 
                     });
                     htmlFiles.data = HTMLdata2DArr(filenamesList);
@@ -310,6 +310,11 @@ namespace readClashReport
             }
         }
 
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        [DllImport("user32.dll")]
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
         private bool UserFilter(object item)
         {
             if (String.IsNullOrEmpty(txtFilter.Text))
@@ -333,6 +338,8 @@ namespace readClashReport
                 this.webViewer.Navigate(currentItem);
             }
         }
+
+
 
         /// <summary>
         /// Window closing event.
@@ -376,18 +383,11 @@ namespace readClashReport
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void emailBtn_Click(object sender, RoutedEventArgs e)
-        {
-            Debug.WriteLine("this is the email button.");
-            //createPDF(MainWindow.currentItem);
-            //string html = File.ReadAllText(@"C:\Users\dodzi\Desktop\Reports\ARCH (Ceilings, Roof Soffits) vs ARCH (00 Level).html");
-            //PdfDocument pdf = PdfGenerator.GeneratePdf(html, PageSize.A4);
-            //PdfDocument pdf = PdfGenerator.GeneratePdf(html, PageSize.A4);
+        //private void emailBtn_Click(object sender, RoutedEventArgs e)
+        //{
+        //    Debug.WriteLine("this is the email button.");
 
-            //pdf.Save(@"C:\Users\dodzi\Desktop\Reports\document.pdf");
-            //excel.writeExcel.PdfSharpConvert(@"C:\Users\dodzi\Desktop\Reports\ARCH (Ceilings, Roof Soffits) vs ARCH (00 Level).html");
-            //excel.writeExcel.CreateMailItem(MainWindow.currentItem);
-        }
+        //}
 
         static async void createPDF(string file)
         {
@@ -405,8 +405,10 @@ namespace readClashReport
             options.Height = 1200;
             options.MarginOptions.Left = "100";
             options.MarginOptions.Right = "100";
-            
-            await page.PdfAsync(Path.Combine(location,Path.GetFileNameWithoutExtension(file)+".pdf"),options);
+
+            await page.PdfAsync(Path.Combine(location, Path.GetFileNameWithoutExtension(file) + ".pdf"), options);
+
+
 
         }
 
@@ -514,6 +516,12 @@ namespace readClashReport
         {
             Debug.WriteLine("this is the pdf button.");
             createPDF(MainWindow.currentItem);
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var hwnd = new WindowInteropHelper(this).Handle;
+            SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_SYSMENU);
         }
     }
 }

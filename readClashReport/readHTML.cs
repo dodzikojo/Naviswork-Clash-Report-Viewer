@@ -1,8 +1,6 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Diagnostics;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
 
 namespace readClashReport
@@ -20,21 +18,21 @@ namespace readClashReport
 
         public static htmlFiles fileData { get; set; }
 
-        
+
 
         //private static Stopwatch watch;
 
-         
+
         public static void readHTMLData(string html)
         {
-            
+
             var htmlDoc = new HtmlDocument();
             htmlDoc.Load(html);
             //htmlDoc.LoadHtml(html);
 
 
             var htmlNodes = htmlDoc.DocumentNode.SelectNodes("//body/table");
-           // MainWindow.fileData.Add(new htmlFiles() { filename = html });
+            // MainWindow.fileData.Add(new htmlFiles() { filename = html });
 
             toleranceCounter = 0;
             clashesCounter = 0;
@@ -55,7 +53,7 @@ namespace readClashReport
             string resolvedTemp = string.Empty;
             string approvedTemp = string.Empty;
 
-            
+
             foreach (var node in htmlNodes)
             {
                 if (node.HasClass("testSummaryTable"))
@@ -73,7 +71,7 @@ namespace readClashReport
                                 var nodess = htmlDoc.DocumentNode.SelectSingleNode($"(//body/table[2]/tr[@class='contentRow'])/td[{toleranceCounter}]");
                                 toleranceTemp = nodess.InnerText.ToString();
                                 //Debug.WriteLine($"Tolerance is: {nodess.InnerText.ToString()}");
-                                
+
                             }
                         }
 
@@ -175,14 +173,14 @@ namespace readClashReport
                         MainWindow.approvedList.Add(approvedTemp);
                         MainWindow.resolvedList.Add(resolvedTemp);
                         MainWindow.typeList.Add(typeTemp);
-                        
+
                     }
                     catch (Exception e)
                     {
 
                         Debug.WriteLine(e.Message);
                     }
-                    
+
                 }
             }
 
