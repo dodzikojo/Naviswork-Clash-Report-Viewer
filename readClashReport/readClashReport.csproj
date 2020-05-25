@@ -5,6 +5,31 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>zoom.ico</ApplicationIcon>
+    <Platforms>AnyCPU;x64</Platforms>
+    <Nullable>disable</Nullable>
+    <AssemblyVersion>0.9.0.0</AssemblyVersion>
+    <FileVersion>0.9.0.0</FileVersion>
+    <PackageReleaseNotes>First Beta Release</PackageReleaseNotes>
+    <Version>0.9.0.0</Version>
+    <Authors>DodziKA</Authors>
+    <Product>Clash Reports Viewer</Product>
+    <Description>Read Autodesk Navisworks HTML clash reports data.</Description>
+    <Copyright>© Copyright 2020</Copyright>
+    <PackageId>Clash-Reports-Viewer</PackageId>
+    <Company>LAAB-Studio</Company>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>false</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +41,6 @@
     <None Remove="assets\images\minimize.png" />
     <None Remove="assets\images\multimedia.png" />
     <None Remove="assets\images\pdf.png" />
-    <None Remove="assets\images\technology.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,9 +66,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="assets\images\pdf.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="assets\images\technology.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

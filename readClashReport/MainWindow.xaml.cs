@@ -65,18 +65,27 @@ namespace readClashReport
 
                 Debug.WriteLine(Settings.Default.WindowLocation);
                 //Set window location
-                if (Settings.Default.WindowLocation != null)
+                try
                 {
-                    this.Top = Settings.Default.WindowLocation.Y;
-                    this.Left = Settings.Default.WindowLocation.X;
-                }
+                    if (Settings.Default.WindowLocation != null)
+                    {
+                        this.Top = Settings.Default.WindowLocation.Y;
+                        this.Left = Settings.Default.WindowLocation.X;
+                    }
 
-                //Set window size
-                if (Settings.Default.WindowSize != null)
-                {
-                    this.Width = Settings.Default.WindowSize.Width;
-                    this.Height = Settings.Default.WindowSize.Height;
+                    //Set window size
+                    if (Settings.Default.WindowSize != null)
+                    {
+                        this.Width = Settings.Default.WindowSize.Width;
+                        this.Height = Settings.Default.WindowSize.Height;
+                    }
                 }
+                catch (Exception e)
+                {
+
+                    Debug.WriteLine(e.Message);
+                }
+                
 
             });
 
@@ -85,7 +94,6 @@ namespace readClashReport
             {
                 if (Properties.Settings.Default.filePathSetting.Length > 0)
                 {
-                    //this.folderTxtBox.Text = Properties.Appsettings.Default.filePathSetting;
                     getHTMLfiles(this.folderTxtBox.Text = Properties.Settings.Default.filePathSetting);
                 }
             }
@@ -248,10 +256,19 @@ namespace readClashReport
         /// </summary>
         public async void DisplayData(List<string> filepathlist)
         {
-            filesListView.ItemsSource = null;
-            filesListView.Items.Clear();
-            fileData.Clear();
-            //htmlFiles.data = null;
+            try
+            {
+                filesListView.ItemsSource = null;
+                filesListView.Items.Clear();
+                fileData.Clear();
+                //htmlFiles.data = null;
+            }
+            catch (Exception e)
+            {
+
+                Debug.WriteLine(e.Message);
+            }
+            
             await Task.Run(() =>
             {
                 try
@@ -305,8 +322,8 @@ namespace readClashReport
                 {
                     Debug.WriteLine($"Url: {url}");
                 }
-                //Console.WriteLine("Press any key to continue...");
-                //Console.ReadLine();
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadLine();
             }
         }
 
@@ -405,6 +422,9 @@ namespace readClashReport
             options.Height = 1200;
             options.MarginOptions.Left = "100";
             options.MarginOptions.Right = "100";
+            options.MarginOptions.Top = "50";
+            options.MarginOptions.Bottom = "50";
+
 
             await page.PdfAsync(Path.Combine(location, Path.GetFileNameWithoutExtension(file) + ".pdf"), options);
 
@@ -514,8 +534,17 @@ namespace readClashReport
 
         private void pdfBtn_Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("this is the pdf button.");
-            createPDF(MainWindow.currentItem);
+            try
+            {
+                Debug.WriteLine("this is the pdf button.");
+                createPDF(MainWindow.currentItem);
+            }
+            catch (Exception ex)
+            {
+
+                Debug.Assert(true, ex.Message,"Info");
+            }
+            
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

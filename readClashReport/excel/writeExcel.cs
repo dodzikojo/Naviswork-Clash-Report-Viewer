@@ -119,7 +119,7 @@ namespace readClashReport.excel
                 DateTime thisDay = DateTime.Now;
 
                 workbook.Close();
-                string excelfileName = Path.Combine(chosenPath, "Clash Report Export_" + thisDay.ToString("yyyyMMdd") + ".xls");
+                string excelfileName = Path.Combine(chosenPath, "Clash Report Export_" + thisDay.ToString("yyyyMMdd-HHmm") + ".xls");
                 WriteToFile(workbook, excelfileName);
 
 

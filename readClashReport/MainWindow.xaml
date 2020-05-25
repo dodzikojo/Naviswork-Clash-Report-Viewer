@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:readClashReport"
         mc:Ignorable="d"
         Background="LightGray"
-        
+        WindowStartupLocation="CenterOwner"
         WindowStyle="SingleBorderWindow"
         Closing="Window_Closing"
         Title="Clash Report Viewer"
@@ -14,10 +14,10 @@
         ResizeMode="CanResizeWithGrip"
         BorderBrush="Black"
         MouseDown="Window_MouseDown"
-        MinHeight="900"
-        MinWidth="1500"
-        Height="900"
-        Width="1500"
+        MinHeight="500"
+        MinWidth="900"
+        Height="600"
+        Width="1100"
         SizeChanged="Window_SizeChanged"
         Loaded="Window_Loaded">
     <Window.CommandBindings>
@@ -127,7 +127,7 @@
                   Grid.ColumnSpan="2"
                   Margin="15,5,5,5"
                   FontSize="14"
-                  BorderThickness="1"
+                  BorderThickness="0.7"
                   BorderBrush="Black"
                   Header="Source">
             <Grid>
@@ -144,6 +144,7 @@
                     <Label Content="Location:"
                            VerticalAlignment="Center"
                            Grid.Row="0"
+                           FontSize="12"
                            Margin="2,5,0,5"
                            Grid.Column="0" />
                     <TextBox Grid.Row="0"
@@ -153,7 +154,7 @@
                              VerticalContentAlignment="Center"
                              Padding="4"
                              Margin="-8,5,5,5"
-                             
+                             FontSize="12"
                              x:Name="folderTxtBox"
                              IsReadOnly="True"
                          TextChanged="folderTxtBox_TextChanged" />
@@ -162,12 +163,14 @@
                                 Height="30"
                             Grid.Row="0"
                             Grid.Column="2"
+                            FontSize="12"
                                 Name="browseBtn"
                                 Click="browseBtn_Click" />
                         <Label Content="Clash Test Reports: "
                                HorizontalAlignment="Right"
                                Grid.Row="1"
                                Grid.Column="1"
+                               FontSize="12"
                                Grid.ColumnSpan="1"
                                VerticalAlignment="Center"
                                Margin="2,5,5,5" />
@@ -175,6 +178,7 @@
                                Grid.Row="1"
                                Grid.Column="2"
                                VerticalAlignment="Center"
+                               FontSize="12"
                                HorizontalAlignment="Left"
                                Name="countLabel" />
 
@@ -199,7 +203,7 @@
         </GroupBox>
         <Label Content="Filter:"
                Grid.Row="1"
-               FontSize="14"
+               FontSize="12"
                Margin="10,5,10,5"
                
                VerticalAlignment="Center"
@@ -209,6 +213,7 @@
                  Grid.Row="1"
                  Grid.Column="0"
                  Grid.ColumnSpan="2"
+                 FontSize="12"
                  VerticalAlignment="Center"
                  TextChanged="txtFilter_TextChanged"
                  Height="30"
