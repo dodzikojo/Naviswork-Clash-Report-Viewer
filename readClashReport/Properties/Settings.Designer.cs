@@ -8,6 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using NPOI.SS.Formula.Functions;
+
 namespace readClashReport.Properties {
     
     
@@ -25,12 +27,13 @@ namespace readClashReport.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Drawing.Point WindowLocation {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string filePathSetting {
             get {
-                return ((global::System.Drawing.Point)(this["WindowLocation"]));
+                return ((string)(this["filePathSetting"]));
             }
             set {
-                this["WindowLocation"] = value;
+                this["filePathSetting"] = value;
             }
         }
         
@@ -47,13 +50,16 @@ namespace readClashReport.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string filePathSetting {
+        public global::System.Drawing.Point WindowLocation {
+                
             get {
-                return ((string)(this["filePathSetting"]));
+               
+                    return ((global::System.Drawing.Point)(this["WindowLocation"]));
+                
+                
             }
             set {
-                this["filePathSetting"] = value;
+                this["WindowLocation"] = value;
             }
         }
     }

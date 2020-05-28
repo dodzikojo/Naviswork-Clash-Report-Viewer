@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -49,6 +50,7 @@ namespace readClashReport
         public static List<string> newList = new List<string>();
         List<string> filePathList = new List<string>();
         public static bool openExcelBool { get; set; }
+        //public static string sample;
 
 
 
@@ -85,7 +87,7 @@ namespace readClashReport
 
                     Debug.WriteLine(e.Message);
                 }
-                
+
 
             });
 
@@ -268,11 +270,12 @@ namespace readClashReport
 
                 Debug.WriteLine(e.Message);
             }
-            
+            this.InfoTipText.Text = "Reading HTML documents...";
             await Task.Run(() =>
             {
                 try
                 {
+                    
                     foreach (string html in filepathlist)
                     {
                         readHTML.readHTMLData(@html);
@@ -290,6 +293,7 @@ namespace readClashReport
 
                     });
                     htmlFiles.data = HTMLdata2DArr(filenamesList);
+                   
 
                 }
                 catch (Exception ex)
@@ -297,7 +301,7 @@ namespace readClashReport
                     Debug.WriteLine(ex.Message);
                 }
             });
-
+            this.InfoTipText.Text = "Load completed";
             try
             {
                 CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(filesListView.ItemsSource);
@@ -395,40 +399,50 @@ namespace readClashReport
         }
 
 
+
+
+
         /// <summary>
-        /// TODO: Send .html as a PDF via email.
+        /// TODO: Figure out why Creatinig PDF does not work in production.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        //private void emailBtn_Click(object sender, RoutedEventArgs e)
-        //{
-        //    Debug.WriteLine("this is the email button.");
-
-        //}
-
-        static async void createPDF(string file)
+        /// <param name="file"></param>
+        static async Task createPDF(string file)
         {
-            await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
-            var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+            try
             {
-                Headless = true
-            });
-            var page = await browser.NewPageAsync();
-            await page.SetViewportAsync(new ViewPortOptions { Width = 50000, Height = 50 });
-            await page.GoToAsync(file);
+                await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
+                var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+                {
+                    Headless = true
+                });
+                var page = await browser.NewPageAsync();
+                await page.SetViewportAsync(new ViewPortOptions { Width = 50000, Height = 50 });
 
-            PdfOptions options = new PdfOptions();
-            options.Width = 2000;
-            options.Height = 1200;
-            options.MarginOptions.Left = "100";
-            options.MarginOptions.Right = "100";
-            options.MarginOptions.Top = "50";
-            options.MarginOptions.Bottom = "50";
+                NavigationOptions navOpts = new NavigationOptions();
+                navOpts.Timeout = 0;
+                await page.GoToAsync(file, navOpts);
 
+                PdfOptions options = new PdfOptions();
+                options.Width = 2000;
+                options.Height = 1200;
+                options.MarginOptions.Left = "100";
+                options.MarginOptions.Right = "100";
+                options.MarginOptions.Top = "50";
+                options.MarginOptions.Bottom = "50";
 
-            await page.PdfAsync(Path.Combine(location, Path.GetFileNameWithoutExtension(file) + ".pdf"), options);
+                await page.PdfAsync(Path.Combine(location, Path.GetFileNameWithoutExtension(file) + ".pdf"), options);
 
+                
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                //sample = e.Message;
 
+                //throw;
+                
+            }
+           
 
         }
 
@@ -440,8 +454,9 @@ namespace readClashReport
         private void excelBtn_Click(object sender, RoutedEventArgs e)
         {
             //Debug.WriteLine("this is the save pdf button");
-
+            this.InfoTipText.Text = "Starting Excel export";
             excel.writeExcel.writeExcelFile(htmlFiles.data);
+            this.InfoTipText.Text = "";
         }
 
         private void openExcelBtn_Checked(object sender, RoutedEventArgs e)
@@ -536,15 +551,24 @@ namespace readClashReport
         {
             try
             {
-                Debug.WriteLine("this is the pdf button.");
-                createPDF(MainWindow.currentItem);
+                var t = createPDF(MainWindow.currentItem);
+
+                if (!t.IsCompleted)
+                {
+                    this.InfoTipText.Text = "PDF export may take longer to complete in some cases, active internet connection may be required.";
+                }
+                else
+                {
+                    this.InfoTipText.Text = "Completed";
+                }
+                
             }
             catch (Exception ex)
             {
 
-                Debug.Assert(true, ex.Message,"Info");
+                Debug.Assert(true, ex.Message, "Info");
             }
-            
+
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -552,6 +576,7 @@ namespace readClashReport
             var hwnd = new WindowInteropHelper(this).Handle;
             SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_SYSMENU);
         }
+
     }
 }
 

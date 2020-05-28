@@ -18,6 +18,7 @@
     <PackageId>Clash-Reports-Viewer</PackageId>
     <Company>LAAB-Studio</Company>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <AssemblyName>Crash Report Viewer</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
