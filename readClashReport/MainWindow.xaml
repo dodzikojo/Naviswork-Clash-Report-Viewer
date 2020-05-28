@@ -114,7 +114,7 @@
                         Width="30"
                         BorderBrush="#33001514" />
                 <Button Name="aboutBtn"
-                        ToolTip="About"
+                        ToolTip="About Crash Report Viewer"
                         Click="aboutBtn_Click">
                     <Image Source="assets/images/about.png"
                            Width="30" />
@@ -301,8 +301,36 @@
                     <TextBlock Name="InfoTipText"
                                FontSize="14.5"
                                VerticalAlignment="Center"
-                               
+                               FontWeight="SemiBold"
                                Text=""/>
+                    
+                </StatusBarItem>
+                <StatusBarItem VerticalAlignment="Center"
+                               HorizontalContentAlignment="Right"
+                               Margin="0,0,15,0"
+                               Grid.ColumnSpan="3"
+                               Grid.Column="2">
+                    <TextBox Name="FilePathText"
+                               FontSize="13.5"
+                               VerticalAlignment="Center"
+                                Padding="10,2,10,2"
+                             ToolTip="Report location"
+                             IsReadOnly="true"
+                             Width="Auto"
+                             Height="25"
+                             Background="LightGray"
+                             FontWeight="SemiBold"
+                             BorderThickness="0"
+                               HorizontalAlignment="Right">
+                        
+                    <!--<Hyperlink NavigateUri=""
+                               FontSize="15"
+                               RequestNavigate="selHyperlink_RequestNavigate"
+                               ToolTip="Click to open in default browser"
+                               
+                               Name="selHyperlink"
+                               Click="selHyperlink_Click"></Hyperlink>-->
+                    </TextBox>
                 </StatusBarItem>
                 <!--<Separator Grid.Column="1" />
                 <StatusBarItem Grid.Column="2">

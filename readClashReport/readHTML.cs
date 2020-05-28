@@ -159,8 +159,9 @@ namespace readClashReport
                         }
 
                     }
-                    string file = Path.GetFileNameWithoutExtension(html);
-                    MainWindow.fileData.Add(new htmlFiles() { clashes = clashesCounttemp, filename = file/*, newClashes = newTemp , active = activeTemp, reviewed = reviewedTemp, type = typeTemp*/});
+                    string file = Path.GetFullPath(html); //Gets the full path to be used later when opening the html for displaying in the viewer.
+
+                    MainWindow.fileData.Add(new htmlFiles() { clashes = clashesCounttemp, filename = Path.GetFileNameWithoutExtension(file)/*, newClashes = newTemp , active = activeTemp, reviewed = reviewedTemp, type = typeTemp*/});
 
                     try
                     {

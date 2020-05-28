@@ -15,7 +15,7 @@ namespace readClashReport.excel
             folderBrowser.Description = "Select a location to save the excel file";
             folderBrowser.UseDescriptionForTitle = true;
             folderBrowser.ShowNewFolderButton = true;
-            folderBrowser.SelectedPath = MainWindow.location;
+            folderBrowser.SelectedPath = Path.GetDirectoryName(MainWindow.location);
 
 
             Nullable<bool> fdRun = folderBrowser.ShowDialog();
@@ -82,7 +82,7 @@ namespace readClashReport.excel
                         {
                             try
                             {
-                                cell_1.SetCellValue(data[rowNo, 0]);
+                                cell_1.SetCellValue(Path.GetFileNameWithoutExtension(data[rowNo, 0]));
                                 cell_2.SetCellValue(data[rowNo, 1]);
                                 cell_3.SetCellValue(Int32.Parse(data[rowNo, 2]));
                                 cell_4.SetCellValue(Int32.Parse(data[rowNo, 3]));
@@ -119,7 +119,7 @@ namespace readClashReport.excel
                 DateTime thisDay = DateTime.Now;
 
                 workbook.Close();
-                string excelfileName = Path.Combine(chosenPath, "Clash Report Export_" + thisDay.ToString("yyyyMMdd-HHmm") + ".xls");
+                string excelfileName = Path.Combine(chosenPath, "Clash Report Export_" + thisDay.ToString("yyyyMMdd") + ".xls");
                 WriteToFile(workbook, excelfileName);
 
 

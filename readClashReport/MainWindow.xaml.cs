@@ -1,5 +1,6 @@
 ﻿using Ookii.Dialogs.Wpf;
 using PuppeteerSharp;
+using readClashReport.Information.UI;
 using readClashReport.Properties;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 
@@ -65,7 +67,6 @@ namespace readClashReport
             {
                 InitializeComponent();
 
-                Debug.WriteLine(Settings.Default.WindowLocation);
                 //Set window location
                 try
                 {
@@ -84,10 +85,8 @@ namespace readClashReport
                 }
                 catch (Exception e)
                 {
-
                     Debug.WriteLine(e.Message);
                 }
-
 
             });
 
@@ -114,7 +113,7 @@ namespace readClashReport
         private List<string> getHTMLfiles(string path)
         {
             List<string> filePathListTemp = new List<string>();
-            string[] fileArray = Directory.GetFiles(path, "*.html");
+            string[] fileArray = Directory.GetFiles(path, "*.html",SearchOption.AllDirectories);
             location = path;
             var results = isValid(fileArray);
 
@@ -289,7 +288,11 @@ namespace readClashReport
                     this.Dispatcher.Invoke(() =>
                     {
                         this.webViewer.Navigate(filepathlist[0]);
+                        //string selection = htmlFiles.data[selectedIndex, 0];
+                        //this.webViewer.Navigate(selection);
+                        this.FilePathText.Text = filepathlist[0];
                         currentItem = filepathlist[0];
+                        location = filepathlist[0];
 
                     });
                     htmlFiles.data = HTMLdata2DArr(filenamesList);
@@ -352,14 +355,39 @@ namespace readClashReport
 
         private void filesListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            foreach (htmlFiles item in this.filesListView.SelectedItems)
-            {
-                //Debug.WriteLine(Path.Combine(this.folderTxtBox.Text, item.filename + ".html"));
-                currentItem = Path.Combine(this.folderTxtBox.Text, item.filename + ".html");
-                this.webViewer.Navigate(currentItem);
-            }
-        }
 
+            //selHyperlink.Inlines.Clear();
+            int selectedIndex = this.filesListView.SelectedIndex;
+            if (selectedIndex >= 0)
+            {
+                if (this.txtFilter.Text.Length > 0)
+                {
+                    string filtertext = this.txtFilter.Text;
+                    this.txtFilter.Clear();
+                   // Debug.WriteLine(this.filesListView.SelectedIndex);
+
+                    string selection = htmlFiles.data[this.filesListView.SelectedIndex, 0];
+                    this.webViewer.Navigate(selection);
+                    this.FilePathText.Text = selection;
+                    this.txtFilter.Text = filtertext;
+                }
+                else
+                {
+                    string selection = htmlFiles.data[selectedIndex, 0];
+                    this.webViewer.Navigate(selection);
+                    this.FilePathText.Text = selection;
+                    location = selection;
+                }
+                
+                //Run run = new Run();
+                //run.Text = selection;
+                //selHyperlink = new Hyperlink(run);
+                //selHyperlink.Inlines.Add(run);
+                //selHyperlink.NavigateUri = new Uri(selection);
+
+            }
+            
+        }
 
 
         /// <summary>
@@ -430,17 +458,13 @@ namespace readClashReport
                 options.MarginOptions.Top = "50";
                 options.MarginOptions.Bottom = "50";
 
-                await page.PdfAsync(Path.Combine(location, Path.GetFileNameWithoutExtension(file) + ".pdf"), options);
+                await page.PdfAsync(Path.Combine(Path.GetDirectoryName(location), Path.GetFileNameWithoutExtension(file) + ".pdf"), options);
 
                 
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
-                //sample = e.Message;
-
-                //throw;
-                
             }
            
 
@@ -576,6 +600,10 @@ namespace readClashReport
             var hwnd = new WindowInteropHelper(this).Handle;
             SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_SYSMENU);
         }
+
+        
+
+      
 
     }
 }
