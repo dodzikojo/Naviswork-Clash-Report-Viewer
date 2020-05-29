@@ -4,12 +4,14 @@ using readClashReport.Information.UI;
 using readClashReport.Properties;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -25,7 +27,7 @@ namespace readClashReport
         public string active { get; set; }
         public string reviewed { get; set; }
         public string type { get; set; }
-        public static string[,] data { get; set; }
+        
 
     }
 
@@ -52,6 +54,7 @@ namespace readClashReport
         public static List<string> newList = new List<string>();
         List<string> filePathList = new List<string>();
         public static bool openExcelBool { get; set; }
+        public static string[,] data { get; set; }
         //public static string sample;
 
 
@@ -67,6 +70,8 @@ namespace readClashReport
             {
                 InitializeComponent();
 
+                
+                
                 //Set window location
                 try
                 {
@@ -90,6 +95,8 @@ namespace readClashReport
 
             });
 
+            
+
             try
 
             {
@@ -102,6 +109,8 @@ namespace readClashReport
             {
                 Debug.WriteLine(e.Message);
             }
+
+           
 
         }
 
@@ -257,11 +266,21 @@ namespace readClashReport
         /// </summary>
         public async void DisplayData(List<string> filepathlist)
         {
+            toleranceList = new List<string>();
+            filenamesList = new List<string>();
+            clashesList = new List<string>();
+            newList = new List<string>();
+            activeList = new List<string>();
+            reviewedList = new List<string>();
+            approvedList = new List<string>();
+            resolvedList = new List<string>();
+            typeList = new List<string>();
+
             try
             {
                 filesListView.ItemsSource = null;
                 filesListView.Items.Clear();
-                fileData.Clear();
+                //fileData.Clear();
                 //htmlFiles.data = null;
             }
             catch (Exception e)
@@ -295,9 +314,8 @@ namespace readClashReport
                         location = filepathlist[0];
 
                     });
-                    htmlFiles.data = HTMLdata2DArr(filenamesList);
+                    data = HTMLdata2DArr(filenamesList);
                    
-
                 }
                 catch (Exception ex)
                 {
@@ -366,14 +384,14 @@ namespace readClashReport
                     this.txtFilter.Clear();
                    // Debug.WriteLine(this.filesListView.SelectedIndex);
 
-                    string selection = htmlFiles.data[this.filesListView.SelectedIndex, 0];
+                    string selection = data[this.filesListView.SelectedIndex, 0];
                     this.webViewer.Navigate(selection);
                     this.FilePathText.Text = selection;
                     this.txtFilter.Text = filtertext;
                 }
                 else
                 {
-                    string selection = htmlFiles.data[selectedIndex, 0];
+                    string selection = data[selectedIndex, 0];
                     this.webViewer.Navigate(selection);
                     this.FilePathText.Text = selection;
                     location = selection;
@@ -479,7 +497,7 @@ namespace readClashReport
         {
             //Debug.WriteLine("this is the save pdf button");
             this.InfoTipText.Text = "Starting Excel export";
-            excel.writeExcel.writeExcelFile(htmlFiles.data);
+            excel.writeExcel.writeExcelFile(data);
             this.InfoTipText.Text = "";
         }
 
@@ -601,9 +619,82 @@ namespace readClashReport
             SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_SYSMENU);
         }
 
-        
 
-      
+       
+
+        private void Sort(string sortBy, ListSortDirection direction)
+        {
+            ICollectionView dataView =
+              CollectionViewSource.GetDefaultView(this.filesListView.ItemsSource);
+
+            dataView.SortDescriptions.Clear();
+            SortDescription sd = new SortDescription(sortBy, direction);
+            dataView.SortDescriptions.Add(sd);
+            dataView.Refresh();
+        }
+
+        #region Sort Listview
+        //GridViewColumnHeader _lastHeaderClicked = null;
+        //ListSortDirection _lastDirection = ListSortDirection.Ascending;
+
+
+        //void GridViewColumnHeaderClickedHandler(object sender,
+        //                                                RoutedEventArgs e)
+        //{
+        //    var headerClicked = e.OriginalSource as GridViewColumnHeader;
+        //    ListSortDirection direction;
+
+        //    if (headerClicked != null)
+        //    {
+        //        if (headerClicked.Role != GridViewColumnHeaderRole.Padding)
+        //        {
+        //            if (headerClicked != _lastHeaderClicked)
+        //            {
+        //                direction = ListSortDirection.Ascending;
+        //            }
+        //            else
+        //            {
+        //                if (_lastDirection == ListSortDirection.Ascending)
+        //                {
+        //                    direction = ListSortDirection.Descending;
+        //                }
+        //                else
+        //                {
+        //                    direction = ListSortDirection.Ascending;
+        //                }
+        //            }
+
+        //            var columnBinding = headerClicked.Column.DisplayMemberBinding as Binding;
+        //            var sortBy = columnBinding?.Path.Path ?? headerClicked.Column.Header as string;
+
+        //            //string header = headerClicked.Column.Header as string;
+        //            Sort(sortBy, direction);
+
+        //            //Sort(sortBy, direction);
+
+        //            if (direction == ListSortDirection.Ascending)
+        //            {
+        //                headerClicked.Column.HeaderTemplate =
+        //                  Resources["HeaderTemplateArrowUp"] as DataTemplate;
+        //            }
+        //            else
+        //            {
+        //                headerClicked.Column.HeaderTemplate =
+        //                  Resources["HeaderTemplateArrowDown"] as DataTemplate;
+        //            }
+
+        //            // Remove arrow from previously sorted header
+        //            if (_lastHeaderClicked != null && _lastHeaderClicked != headerClicked)
+        //            {
+        //                _lastHeaderClicked.Column.HeaderTemplate = null;
+        //            }
+
+        //            _lastHeaderClicked = headerClicked;
+        //            _lastDirection = direction;
+        //        }
+        //    }
+        //}
+        #endregion
 
     }
 }

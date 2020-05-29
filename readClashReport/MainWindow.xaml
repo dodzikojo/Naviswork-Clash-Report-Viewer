@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        
         xmlns:local="clr-namespace:readClashReport"
         mc:Ignorable="d"
         Background="LightGray"
@@ -21,6 +22,8 @@
         SizeChanged="Window_SizeChanged"
         Loaded="Window_Loaded"
         WindowState="Maximized">
+    <!--xmlns:s="clr-namespace:System.Collections;assembly=mscorlib"
+        xmlns:p="clr-namespace:System;assembly=mscorlib"-->
     <Window.CommandBindings>
         <!--<CommandBinding Command="Copy"
                         CanExecute="commonCommandBinding_CanExecute" />-->
@@ -238,7 +241,9 @@
                           IsTextSearchEnabled="True"
                           BorderThickness="1"
                           SelectionMode="Single"
-                          MouseDoubleClick="filesListView_MouseDoubleClick">
+                  MouseDoubleClick="filesListView_MouseDoubleClick">
+            <!--GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler"-->
+            
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Clash Title"

@@ -54,6 +54,9 @@ namespace readClashReport
             string approvedTemp = string.Empty;
 
 
+            
+
+
             foreach (var node in htmlNodes)
             {
                 if (node.HasClass("testSummaryTable"))
@@ -84,6 +87,7 @@ namespace readClashReport
                                 var nodess = htmlDoc.DocumentNode.SelectSingleNode($"(//body/table[2]/tr[@class='contentRow'])/td[{clashesCounter}]");
                                 //Debug.WriteLine($"Total number of clashes are: {nodess.InnerText.ToString()}");
                                 clashesCounttemp = nodess.InnerText.ToString();
+                                Debug.WriteLine(nodess.InnerText.ToString());
                                 //filenameTemp = html;
                                 //MainWindow.fileData.Add(new htmlFiles() { clashes = nodess.InnerText.ToString(), filename = html });
                             }
