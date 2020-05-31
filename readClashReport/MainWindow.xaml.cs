@@ -1,4 +1,5 @@
-﻿using Ookii.Dialogs.Wpf;
+﻿using Newtonsoft.Json;
+using Ookii.Dialogs.Wpf;
 using PuppeteerSharp;
 using readClashReport.Information.UI;
 using readClashReport.Properties;
@@ -315,7 +316,10 @@ namespace readClashReport
 
                     });
                     data = HTMLdata2DArr(filenamesList);
-                   
+                    string json = JsonConvert.SerializeObject(MainWindow.fileData, Formatting.Indented);
+
+                    Debug.WriteLine(json);
+
                 }
                 catch (Exception ex)
                 {

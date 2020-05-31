@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -166,6 +167,8 @@ namespace readClashReport
                     string file = Path.GetFullPath(html); //Gets the full path to be used later when opening the html for displaying in the viewer.
 
                     MainWindow.fileData.Add(new htmlFiles() { clashes = clashesCounttemp, filename = Path.GetFileNameWithoutExtension(file)/*, newClashes = newTemp , active = activeTemp, reviewed = reviewedTemp, type = typeTemp*/});
+
+                    
 
                     try
                     {

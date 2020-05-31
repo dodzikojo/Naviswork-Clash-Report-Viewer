@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>Crash Viewer</Name>
+    <Assembly>C:\Users\Dodzi\source\repos\Naviswork-Clash-Report-Viewer\CrashViewerRevitAddIn\bin\Debug\CrashViewerRevitAddIn.dll</Assembly>
+    <AddInId>
+      22192a7a-4a80-4b03-8a3c-c0f2842595b7
+    </AddInId>
+    <FullClassName>CrashViewerRevitAddIn.MainClass</FullClassName>
+    <VendorId>BIM_Coordinator</VendorId>
+    <VendorDescription>DodziKA</VendorDescription>
+  </AddIn>
+</RevitAddIns>
