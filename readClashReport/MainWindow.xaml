@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:local="clr-namespace:readClashReport"
         mc:Ignorable="d"
         Background="LightGray"
@@ -44,7 +44,7 @@
             <RowDefinition Height="115" />
             <RowDefinition Height="40" />
             <RowDefinition Height="1*" />
-            <RowDefinition Height="27" />
+            <RowDefinition Height="40" />
         </Grid.RowDefinitions>
         <ToolBarTray 
                     Grid.Row="0"
@@ -82,7 +82,7 @@
                         
                         Click="excelBtn_Click">
                     
-                    <Image Source="assets/images/excel.png"
+                    <Image Source="assets/images/xls.png"
                            Width="30"/>
                 </Button>
                 
@@ -112,8 +112,15 @@
                     <Image Source="assets/images/multimedia.png"
                            Width="30"/>
                 </Button>-->
+              
+                <Button Name="jsonBtn"
+                        ToolTip=""
+                        Click="jsonBtn_Click">
+                    <Image Source="assets/images/json.png"
+                           Width="30" />
+                </Button>
                 <Border BorderThickness="1"
-                        Margin="0,0,5,5"
+                        Margin="0,10,5,5"
                         Width="30"
                         BorderBrush="#33001514" />
                 <Button Name="aboutBtn"
@@ -122,7 +129,8 @@
                     <Image Source="assets/images/about.png"
                            Width="30" />
                 </Button>
-
+                
+                
             </ToolBar>
         </ToolBarTray>
         
@@ -350,6 +358,20 @@
             </StatusBar>
             
         </DockPanel>
+        <StackPanel Orientation="Vertical"
+                    Grid.Column="4"
+                    Grid.Row="3">
+            <fa:ImageAwesome Icon="Spinner"
+                             Name="loadIcon"
+                             Margin="0,5,0,5"
+                             Spin="False"
+                             Grid.Row="5"
+                             SpinDuration="2"
+                             Visibility="Visible"
+                             Foreground="#93B7BE"
+                             Height="30"
+                             Width="30" />
+        </StackPanel>
     </Grid>
     
 </Window>

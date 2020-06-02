@@ -17,7 +17,7 @@ namespace readClashReport
         private static int resolvedCounter { get; set; }
         private static int typeCounter { get; set; }
 
-        public static htmlFiles fileData { get; set; }
+        public static ReadHtmlFiles fileData { get; set; }
 
 
 
@@ -166,7 +166,7 @@ namespace readClashReport
                     }
                     string file = Path.GetFullPath(html); //Gets the full path to be used later when opening the html for displaying in the viewer.
 
-                    MainWindow.fileData.Add(new htmlFiles() { clashes = clashesCounttemp, filename = Path.GetFileNameWithoutExtension(file)/*, newClashes = newTemp , active = activeTemp, reviewed = reviewedTemp, type = typeTemp*/});
+                    MainWindow.fileData.Add(new ReadHtmlFiles() { clashes = clashesCounttemp, filename = Path.GetFileNameWithoutExtension(file)/*, newClashes = newTemp , active = activeTemp, reviewed = reviewedTemp, type = typeTemp*/});
 
                     
 

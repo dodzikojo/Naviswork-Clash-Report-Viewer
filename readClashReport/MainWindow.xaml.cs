@@ -3,6 +3,7 @@ using Ookii.Dialogs.Wpf;
 using PuppeteerSharp;
 using readClashReport.Information.UI;
 using readClashReport.Properties;
+using readClashReport.reader_classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,17 +21,7 @@ using System.Windows.Interop;
 
 namespace readClashReport
 {
-    public class htmlFiles
-    {
-        public string filename { get; set; }
-        public string clashes { get; set; }
-        public string newClashes { get; set; }
-        public string active { get; set; }
-        public string reviewed { get; set; }
-        public string type { get; set; }
-        
-
-    }
+   
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -40,10 +31,11 @@ namespace readClashReport
         private const int GWL_STYLE = -16;
         private const int WS_SYSMENU = 0x80000;
 
+        public static List<ReadClashData> allClashData = new List<ReadClashData>();
         public static string location { get; set; }
         private static string filename { get; set; }
         public static string currentItem { get; set; }
-        public static List<htmlFiles> fileData = new List<htmlFiles>();
+        public static List<ReadHtmlFiles> fileData = new List<ReadHtmlFiles>();
         public static List<string> filenamesList = new List<string>();
         public static List<string> clashesList = new List<string>();
         public static List<string> activeList = new List<string>();
@@ -126,13 +118,15 @@ namespace readClashReport
             string[] fileArray = Directory.GetFiles(path, "*.html",SearchOption.AllDirectories);
             location = path;
             var results = isValid(fileArray);
+            
 
             if (results.Item2)
             {
                 this.folderTxtBox.Text = path;
                 //htmlFiles.data = HTMLdata2DArr(results.Item1);
-                DisplayData(results.Item1);
-
+                
+                filePathList = results.Item1;
+                DisplayData(filePathList);
             }
             return filePathListTemp;
         }
@@ -221,7 +215,7 @@ namespace readClashReport
         {
             bool valid;
             List<string> filePathListTemp = new List<string>();
-            filePathList.Clear();
+            //filePathList.Clear();
             if (tempFilepaths.Length > 0)
             {
                 if (tempFilepaths[0].ToString().ToLower().Contains("vs"))
@@ -290,6 +284,7 @@ namespace readClashReport
                 Debug.WriteLine(e.Message);
             }
             this.InfoTipText.Text = "Reading HTML documents...";
+            this.loadIcon.Spin = true;
             await Task.Run(() =>
             {
                 try
@@ -316,9 +311,7 @@ namespace readClashReport
 
                     });
                     data = HTMLdata2DArr(filenamesList);
-                    string json = JsonConvert.SerializeObject(MainWindow.fileData, Formatting.Indented);
-
-                    Debug.WriteLine(json);
+                    
 
                 }
                 catch (Exception ex)
@@ -327,6 +320,7 @@ namespace readClashReport
                 }
             });
             this.InfoTipText.Text = "Load completed";
+            this.loadIcon.Spin = false;
             try
             {
                 CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(filesListView.ItemsSource);
@@ -366,7 +360,7 @@ namespace readClashReport
             if (String.IsNullOrEmpty(txtFilter.Text))
                 return true;
             else
-                return ((item as htmlFiles).filename.IndexOf(txtFilter.Text, StringComparison.OrdinalIgnoreCase) >= 0);
+                return ((item as ReadHtmlFiles).filename.IndexOf(txtFilter.Text, StringComparison.OrdinalIgnoreCase) >= 0);
         }
 
         private void txtFilter_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
@@ -378,7 +372,6 @@ namespace readClashReport
         private void filesListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
 
-            //selHyperlink.Inlines.Clear();
             int selectedIndex = this.filesListView.SelectedIndex;
             if (selectedIndex >= 0)
             {
@@ -401,14 +394,8 @@ namespace readClashReport
                     location = selection;
                 }
                 
-                //Run run = new Run();
-                //run.Text = selection;
-                //selHyperlink = new Hyperlink(run);
-                //selHyperlink.Inlines.Add(run);
-                //selHyperlink.NavigateUri = new Uri(selection);
 
             }
-            
         }
 
 
@@ -700,7 +687,40 @@ namespace readClashReport
         //}
         #endregion
 
+        private async void jsonBtn_Click(object sender, RoutedEventArgs e)
+        {
+            this.loadIcon.Spin = true;
+
+            allClashData.Clear();
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            await Task.Run(() =>
+            {
+                foreach (string item in filePathList)
+                {
+                    Debug.WriteLine(item);
+                    readClashData.ReadHTML_ClashData(item);
+                }
+            });
+
+            TimeSpan ts = stopwatch.Elapsed;
+
+            Debug.WriteLine(ts.TotalSeconds);
+
+            Debug.WriteLine($"Total number of clashes in the folder is: {readClashData.overallCounter}.");
+
+            string json = JsonConvert.SerializeObject(allClashData, Formatting.Indented);
+
+            // serialize JSON to a string and then write string to a file
+            File.WriteAllText(@"C:\Users\Dodzi\Desktop\HTML Reports\list.json", json);
+
+
+            this.loadIcon.Spin = false;
+
+        }
     }
+    
 }
 
 
