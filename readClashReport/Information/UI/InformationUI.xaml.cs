@@ -39,30 +39,30 @@ namespace readClashReport.Information.UI
  
         private async void reportBtn_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
-            NetOffice.OutlookApi.Application outApp = new NetOffice.OutlookApi.Application();
-            MailItem mailItem = (MailItem)outApp.CreateItem(OlItemType.olMailItem);
-            mailItem.Subject = "Clash Report Viewer Issue";
-            mailItem.Body = "**Describe Issue Here**";
-            mailItem.To = "dodzi@windowslive.com";
-            mailItem.Importance = OlImportance.olImportanceNormal;
+            //this.Close();
+            //NetOffice.OutlookApi.Application outApp = new NetOffice.OutlookApi.Application();
+            //MailItem mailItem = (MailItem)outApp.CreateItem(OlItemType.olMailItem);
+            //mailItem.Subject = "Clash Report Viewer Issue";
+            //mailItem.Body = "**Describe Issue Here**";
+            //mailItem.To = "dodzi@windowslive.com";
+            //mailItem.Importance = OlImportance.olImportanceNormal;
 
-            await Task.Run(() =>
-            {
+            //await Task.Run(() =>
+            //{
 
-                try
-                {
-                    mailItem.Display();
+            //    try
+            //    {
+            //        mailItem.Display();
 
-                }
-                catch (System.Exception ex)
-                {
+            //    }
+            //    catch (System.Exception ex)
+            //    {
 
-                    Debug.WriteLine(ex.Message);
-                }
+            //        Debug.WriteLine(ex.Message);
+            //    }
 
 
-            });
+            //});
 
         }
 

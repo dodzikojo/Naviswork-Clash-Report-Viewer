@@ -9,6 +9,7 @@ namespace readClashReport
 
         public string filename { get; set; }
         public string clashes { get; set; }
+        public DateTime timeFileCreated { get; set; }
         public string newClashes { get; set; }
         public string active { get; set; }
         public string reviewed { get; set; }

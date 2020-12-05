@@ -68,18 +68,16 @@ namespace readClashReport
                 //Set window location
                 try
                 {
-                    if (Settings.Default.WindowLocation != null)
-                    {
-                        this.Top = Settings.Default.WindowLocation.Y;
-                        this.Left = Settings.Default.WindowLocation.X;
-                    }
+                   
+                    //    this.Top = Settings.Default.WindowLocation.Y;
+                    //    this.Left = Settings.Default.WindowLocation.X;
+                   
 
-                    //Set window size
-                    if (Settings.Default.WindowSize != null)
-                    {
-                        this.Width = Settings.Default.WindowSize.Width;
-                        this.Height = Settings.Default.WindowSize.Height;
-                    }
+                    ////Set window size
+                   
+                    //    this.Width = Settings.Default.WindowSize.Width;
+                    //    this.Height = Settings.Default.WindowSize.Height;
+                    
                 }
                 catch (Exception e)
                 {
@@ -222,7 +220,7 @@ namespace readClashReport
                 {
                     fileData.Clear();
                     valid = true;
-                    this.countLabel.Content = tempFilepaths.Length.ToString();
+                    
                     foreach (string item in tempFilepaths)
                     {
                         if (Path.GetFileNameWithoutExtension(item).ToLower().Contains("vs") && Path.GetExtension(item).ToString() == ".html")
@@ -295,13 +293,17 @@ namespace readClashReport
                         readHTML.readHTMLData(@html);
                         this.Dispatcher.Invoke(() =>
                         {
+                            
                             filesListView.ItemsSource = fileData;
                             filesListView.Items.Refresh();
 
                         });
+                        
                     }
+                    
                     this.Dispatcher.Invoke(() =>
                     {
+                        this.countLabel.Content = filepathlist.Count;
                         this.webViewer.Navigate(filepathlist[0]);
                         //string selection = htmlFiles.data[selectedIndex, 0];
                         //this.webViewer.Navigate(selection);
@@ -409,30 +411,30 @@ namespace readClashReport
 
 
             // Copy window location to app settings
-            Settings.Default.WindowLocation = new System.Drawing.Point(Convert.ToInt32(this.Left), Convert.ToInt32(this.Top));
+            //Settings.Default.WindowLocation = new System.Drawing.Point(Convert.ToInt32(this.Left), Convert.ToInt32(this.Top));
 
-            Debug.WriteLine(this.folderTxtBox.Text);
+            //Debug.WriteLine(this.folderTxtBox.Text);
 
-            //Copy window size to app settings
-            if (this.WindowState == WindowState.Normal)
-            {
-                Settings.Default.WindowSize = new System.Drawing.Size(Convert.ToInt32(this.Width), Convert.ToInt32(this.Height));
-            }
-            else
-            {
-                Settings.Default.WindowSize = new System.Drawing.Size(Convert.ToInt32(this.RestoreBounds.Size.Width), Convert.ToInt32(this.RestoreBounds.Size.Height));
-            }
-            Properties.Settings.Default.Save();
-            e.Cancel = true;
-            try
-            {
-                this.Close();
-            }
-            catch (Exception ex)
-            {
-                Environment.Exit(0);
-                Debug.WriteLine(ex.Message);
-            }
+            ////Copy window size to app settings
+            //if (this.WindowState == WindowState.Normal)
+            //{
+            //    Settings.Default.WindowSize = new System.Drawing.Size(Convert.ToInt32(this.Width), Convert.ToInt32(this.Height));
+            //}
+            //else
+            //{
+            //    Settings.Default.WindowSize = new System.Drawing.Size(Convert.ToInt32(this.RestoreBounds.Size.Width), Convert.ToInt32(this.RestoreBounds.Size.Height));
+            //}
+            //Properties.Settings.Default.Save();
+            //e.Cancel = true;
+            //try
+            //{
+            //    this.Close();
+            //}
+            //catch (Exception ex)
+            //{
+            //    Environment.Exit(0);
+            //    Debug.WriteLine(ex.Message);
+            //}
         }
 
 
@@ -713,7 +715,7 @@ namespace readClashReport
             string json = JsonConvert.SerializeObject(allClashData, Formatting.Indented);
 
             // serialize JSON to a string and then write string to a file
-            File.WriteAllText(@"C:\Users\Dodzi\Desktop\HTML Reports\list.json", json);
+            File.WriteAllText(@"C:\Users\raybe\Desktop\New folder\list.json", json);
 
 
             this.loadIcon.Spin = false;

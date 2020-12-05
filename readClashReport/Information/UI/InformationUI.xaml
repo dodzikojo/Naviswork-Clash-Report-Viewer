@@ -63,6 +63,7 @@
 
         </TextBox>
         <Button Grid.Row="10"
+                Visibility="Collapsed"
                 HorizontalContentAlignment="Center"
                 Name="reportBtn"
                 Margin="5"

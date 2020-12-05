@@ -166,7 +166,7 @@ namespace readClashReport
                     }
                     string file = Path.GetFullPath(html); //Gets the full path to be used later when opening the html for displaying in the viewer.
 
-                    MainWindow.fileData.Add(new ReadHtmlFiles() { clashes = clashesCounttemp, filename = Path.GetFileNameWithoutExtension(file)/*, newClashes = newTemp , active = activeTemp, reviewed = reviewedTemp, type = typeTemp*/});
+                    MainWindow.fileData.Add(new ReadHtmlFiles() { clashes = clashesCounttemp, filename = Path.GetFileNameWithoutExtension(file), timeFileCreated = File.GetCreationTime(file)/*, newClashes = newTemp , active = activeTemp, reviewed = reviewedTemp, type = typeTemp*/});
 
                     
 

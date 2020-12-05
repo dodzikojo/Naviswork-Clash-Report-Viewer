@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrashViewerRevitAddIn", "CrashViewerRevitAddIn\CrashViewerRevitAddIn.csproj", "{C0C73F75-9EE5-498E-A0F9-DB5F01291E3B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,18 +31,6 @@ Global
 		{0FD212FE-A5A1-4015-9520-4279800B919C}.Release|x64.Build.0 = Release|x64
 		{0FD212FE-A5A1-4015-9520-4279800B919C}.Release|x86.ActiveCfg = Release|Any CPU
 		{0FD212FE-A5A1-4015-9520-4279800B919C}.Release|x86.Build.0 = Release|Any CPU
-		{C0C73F75-9EE5-498E-A0F9-DB5F01291E3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C0C73F75-9EE5-498E-A0F9-DB5F01291E3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C0C73F75-9EE5-498E-A0F9-DB5F01291E3B}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{C0C73F75-9EE5-498E-A0F9-DB5F01291E3B}.Debug|x64.Build.0 = Debug|Any CPU
-		{C0C73F75-9EE5-498E-A0F9-DB5F01291E3B}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{C0C73F75-9EE5-498E-A0F9-DB5F01291E3B}.Debug|x86.Build.0 = Debug|Any CPU
-		{C0C73F75-9EE5-498E-A0F9-DB5F01291E3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C0C73F75-9EE5-498E-A0F9-DB5F01291E3B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C0C73F75-9EE5-498E-A0F9-DB5F01291E3B}.Release|x64.ActiveCfg = Release|Any CPU
-		{C0C73F75-9EE5-498E-A0F9-DB5F01291E3B}.Release|x64.Build.0 = Release|Any CPU
-		{C0C73F75-9EE5-498E-A0F9-DB5F01291E3B}.Release|x86.ActiveCfg = Release|Any CPU
-		{C0C73F75-9EE5-498E-A0F9-DB5F01291E3B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

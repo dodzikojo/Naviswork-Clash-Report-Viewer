@@ -260,7 +260,10 @@
                             <GridViewColumn Header="Clashes"
                                             DisplayMemberBinding="{Binding clashes}"
                                             Width="100"></GridViewColumn>
-                            <!--<GridViewColumn Header="New"
+                    <GridViewColumn Header="File Creation Time"
+                                            DisplayMemberBinding="{Binding timeFileCreated, StringFormat=D}"
+                                            Width="200"></GridViewColumn>
+                    <!--<GridViewColumn Header="New"
                                         DisplayMemberBinding="{Binding newClashes}"
                                         Width="100"></GridViewColumn>
                         <GridViewColumn Header="Active"
